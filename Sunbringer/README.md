@@ -1,4 +1,4 @@
-[!top_banner](../.github/banner.jpg)
+![top_banner](../.github/banner.jpg)
 
 ---
 
@@ -14,4 +14,4 @@ The binary format of the Sunbringer asset bundle attempts to be as intuitive as 
 
 ---
 
-[!bottom_banner](../.github/banner.jpg)
+![bottom_banner](../.github/banner.jpg)
