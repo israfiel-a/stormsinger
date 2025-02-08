@@ -3,6 +3,12 @@ name: CMake Build Test
 on:
   push:
     branches: [ "master" ]
+    paths-ignore:
+        - "**/README.md"
+        - "**/LICENSE.md"
+        - ".gitattributes"
+        - ".gitignore"
+        - "CMakePresets.json"
   pull_request:
     branches: [ "master" ]
 
