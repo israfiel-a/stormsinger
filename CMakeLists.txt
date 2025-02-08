@@ -1,21 +1,30 @@
-﻿# CMakeList.txt : CMake project for Stormsinger, include source and define
-# project specific logic here.
-#
-cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required (VERSION 3.8 FATAL_ERROR)
+project("Stormsinger" LANGUAGES CXX VERSION 0.1.0 DESCRIPTION 
+	"Stormsinger is an infinite driving game set in the Leto universe")
 
-# Enable Hot Reload for MSVC compilers if supported.
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Stormsinger)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Lightbleeder)
+
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 20)
+
+if(MSVC)
+	add_compile_options(/Wall)
+	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+		add_compile_options(/Od)
+	else()
+		add_compile_options(/O2)
+	endif()
+else()
+	add_compile_options(-Wall -Wextra -Werror -Wpedantic)
+	# TODO: Add more options when next on Linux machine.
+	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+		add_compile_options(-O0 -g)
+	else()
+		add_compile_options(-O3)
+	endif()
 endif()
 
-project ("Stormsinger")
-
-# Add source to this project's executable.
-add_executable (Stormsinger "Stormsinger.cpp" "Stormsinger.h")
-
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET Stormsinger PROPERTY CXX_STANDARD 20)
-endif()
-
-# TODO: Add tests and install targets if needed.
+add_subdirectory("Lightbleeder") # Pull in the Lightbleeder engine.
+add_subdirectory("Sunbringer")   # Pull in the Sunbringer asset library.
+add_subdirectory("Abyssguard")   # Pull in the game's code.
