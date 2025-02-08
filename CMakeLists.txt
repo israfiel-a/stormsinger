@@ -4,6 +4,7 @@ project("Stormsinger" LANGUAGES CXX VERSION 0.1.0 DESCRIPTION
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Stormsinger)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Lightbleeder)
+link_directories("${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 20)
@@ -24,6 +25,16 @@ else()
 		add_compile_options(-O3)
 	endif()
 endif()
+
+include(FetchContent)
+
+FetchContent_Declare(glfw GIT_REPOSITORY https://github.com/glfw/glfw.git GIT_TAG 3.3.4)
+FetchContent_GetProperties(glfw)
+if(NOT glfw_POPULATED)
+	FetchContent_Populate(glfw)
+	add_subdirectory("${glfw_SOURCE_DIR}" "${glfw_BINARY_DIR}" EXCLUDE_FROM_ALL)
+endif()
+include_directories("${glfw_SOURCE_DIR}/include")
 
 add_subdirectory("Lightbleeder") # Pull in the Lightbleeder engine.
 add_subdirectory("Sunbringer")   # Pull in the Sunbringer asset library.
