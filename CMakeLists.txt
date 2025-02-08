@@ -9,20 +9,31 @@ link_directories("${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 20)
 
-include(FetchContent)
-
-FetchContent_Declare(glfw GIT_REPOSITORY https://github.com/glfw/glfw.git GIT_TAG 3.3.4)
-FetchContent_GetProperties(glfw)
-if(NOT glfw_POPULATED)
-	FetchContent_Populate(glfw)
-    set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build the GLFW example programs")
-    set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build the GLFW test programs")
-    set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build the GLFW documentation")
-    set(GLFW_INSTALL OFF CACHE INTERNAL "Generate installation target")
-	add_subdirectory("${glfw_SOURCE_DIR}" "${glfw_BINARY_DIR}" EXCLUDE_FROM_ALL)
-endif()
-include_directories("${glfw_SOURCE_DIR}/include")
-
 add_subdirectory("Lightbleeder") # Pull in the Lightbleeder engine.
 add_subdirectory("Sunbringer")   # Pull in the Sunbringer asset library.
 add_subdirectory("Abyssguard")   # Pull in the game's code.
+
+# A list of the compiler options we'll apply to each target.
+set(COMPILER_OPTIONS)
+if(MSVC)
+	list(APPEND COMPILER_OPTIONS /Wall /WX /external:W0 /external:anglebrackets)
+	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+		list(APPEND COMPILER_OPTIONS /Od /Zi /Zo /EHa /EHr /fsanitize=address /fsanitize=fuzzer
+			/fsanitize-coverage=edge /fsanitize-coverage=inline-8bit-counters
+			/fsanitize-coverage=trace-cmp /fsanitize-coverage=trace-div)
+	else()
+		list(APPEND COMPILER_OPTIONS /O2 /fp:fast /GL /GS- /Gw /Qpar)
+	endif()
+else()
+	list(APPEND COMPILER_OPTIONS -Wall -Wextra -Werror -Wpedantic)
+	# TODO: Add more options when next on Linux machine.
+	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+		list(APPEND COMPILER_OPTIONS -O0 -g)
+	else()
+		list(APPEND COMPILER_OPTIONS -O3)
+	endif()
+endif()
+
+target_compile_options(Lightbleeder PRIVATE ${COMPILER_OPTIONS})
+target_compile_options(Sunbringer PRIVATE ${COMPILER_OPTIONS})
+target_compile_options(Stormsinger PRIVATE ${COMPILER_OPTIONS})

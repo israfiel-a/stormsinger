@@ -1,11 +1,11 @@
-#include <Window.hpp>
+#include "Window.hpp"
 
 #include <iostream>
 #include <stdexcept>
 
 namespace Lightbleeder
 {
-    Window::Window()
+    Window::Window(std::string_view title)
     {
         bool initialized = (bool)glfwInit();
         if (!initialized)
@@ -19,8 +19,8 @@ namespace Lightbleeder
         GLFWmonitor *monitor = glfwGetPrimaryMonitor();
         const GLFWvidmode *mode = glfwGetVideoMode(monitor);
 
-        window = glfwCreateWindow(mode->width, mode->height,
-                                  "Lightbleeder", monitor, nullptr);
+        window = glfwCreateWindow(mode->width, mode->height, title.data(),
+                                  monitor, nullptr);
         if (window == nullptr)
             throw std::runtime_error("Failed to create window.");
 
