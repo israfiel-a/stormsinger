@@ -15,13 +15,12 @@ FetchContent_Declare(glfw GIT_REPOSITORY https://github.com/glfw/glfw.git GIT_TA
 FetchContent_GetProperties(glfw)
 if(NOT glfw_POPULATED)
 	FetchContent_MakeAvailable(glfw)
-    if(NOT MSVC)
-        cmake_policy(SET CMP0079 NEW)
-        target_link_libraries(glfw PUBLIC dl m x11)
-    endif()
 endif()
 
 add_dependencies(Lightbleeder glfw)
 target_include_directories(Lightbleeder PUBLIC "${glfw_SOURCE_DIR}/include" 
     "${Vulkan_INCLUDE_DIRS}" "Include")
 target_link_libraries(Lightbleeder PUBLIC glfw3)
+if(UNIX)
+	target_link_libraries(Lightbleeder PUBLIC ${glfw_LIBRARIES})
+endif()
