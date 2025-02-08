@@ -14,13 +14,14 @@ namespace Lightbleeder
             Window();
 
         public:
-            static Window &Get()
+            inline static Window &Get()
             {
                 static Window instance;
                 return instance;
             }
 
-            inline void SetTitle(const std::string_view title) noexcept
+            inline void
+            SetTitle(const std::string_view title) const noexcept
             {
                 glfwSetWindowTitle(window, title.data());
             }

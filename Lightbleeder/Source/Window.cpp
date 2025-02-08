@@ -7,7 +7,7 @@ namespace Lightbleeder
 {
     Window::Window()
     {
-        bool initialized = glfwInit();
+        bool initialized = (bool)glfwInit();
         if (!initialized)
             // TODO: Log system.
             throw std::runtime_error("Failed to initialize GLFW.");
