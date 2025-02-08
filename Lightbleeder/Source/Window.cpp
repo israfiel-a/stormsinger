@@ -10,7 +10,7 @@ namespace Lightbleeder
         bool initialized = (bool)glfwInit();
         if (!initialized)
             // TODO: Log system.
-            throw std::runtime_error("Failed to initialize GLFW.");
+            exit(EXIT_FAILURE);
 
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
@@ -21,8 +21,7 @@ namespace Lightbleeder
 
         window = glfwCreateWindow(mode->width, mode->height, title.data(),
                                   monitor, nullptr);
-        if (window == nullptr)
-            throw std::runtime_error("Failed to create window.");
+        if (window == nullptr) exit(EXIT_FAILURE);
 
         while (!glfwWindowShouldClose(window)) { glfwPollEvents(); }
     }
