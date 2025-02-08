@@ -6,6 +6,7 @@ int main(int argc, char **argv)
     (void)argv;
 
     Lightbleeder::Window window = Lightbleeder::Window("Stormsinger");
+    (void)window;
 
     return 0;
 }
