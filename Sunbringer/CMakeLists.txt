@@ -1,4 +1,4 @@
-add_executable(Sunbringer "Sunbringer.cpp")
+add_executable(Sunbringer "Sunbringer.c")
 
 # file(COPY "Textures" DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Sunbringer)
 

@@ -1,17 +1,22 @@
 ﻿cmake_minimum_required (VERSION 3.10 FATAL_ERROR)
-project("Stormsinger" LANGUAGES CXX VERSION 0.1.0 DESCRIPTION 
+project("Stormsinger" LANGUAGES C VERSION 0.1.0 DESCRIPTION 
 	"Stormsinger is an infinite driving game set in the Leto universe")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Stormsinger)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Lightbleeder)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Chainbinder)
 link_directories("${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
 
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 20)
+# Damn you Microsoft. Damn you.
+if(MSVC)
+	add_compile_options(/std:clatest)
+else()
+	set(CMAKE_C_STANDARD_REQUIRED ON)
+	set(CMAKE_C_STANDARD 23)
+endif()
 
-add_subdirectory("Lightbleeder") # Pull in the Lightbleeder engine.
-add_subdirectory("Sunbringer")   # Pull in the Sunbringer asset library.
-add_subdirectory("Abyssguard")   # Pull in the game's code.
+add_subdirectory("Chainbinder") # Pull in the Chainbinder engine.
+add_subdirectory("Sunbringer")  # Pull in the Sunbringer asset library.
+add_subdirectory("Abyssguard")  # Pull in the game's code.
 
 # A list of the compiler options we'll apply to each target.
 set(COMPILER_OPTIONS)
@@ -35,6 +40,6 @@ else()
 	endif()
 endif()
 
-target_compile_options(Lightbleeder PRIVATE ${COMPILER_OPTIONS})
+target_compile_options(Chainbinder PRIVATE ${COMPILER_OPTIONS})
 target_compile_options(Sunbringer PRIVATE ${COMPILER_OPTIONS})
 target_compile_options(Stormsinger PRIVATE ${COMPILER_OPTIONS})

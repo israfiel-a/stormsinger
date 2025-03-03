@@ -1,6 +1,6 @@
-set(ABYSSGUARD_FILE "Abyssguard.cpp")
+set(ABYSSGUARD_FILE "Abyssguard.c")
 
 add_executable(Stormsinger ${ABYSSGUARD_FILE})
-add_dependencies(Stormsinger Lightbleeder)
-target_include_directories(Stormsinger PRIVATE "${CMAKE_SOURCE_DIR}/Lightbleeder/Include")
-target_link_libraries(Stormsinger Lightbleeder)
+add_dependencies(Stormsinger Chainbinder)
+target_include_directories(Stormsinger PRIVATE "${CMAKE_SOURCE_DIR}/Chainbinder")
+target_link_libraries(Stormsinger Chainbinder)

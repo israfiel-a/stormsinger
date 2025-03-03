@@ -1,7 +1,7 @@
-set(LIGHTBLEEDER_SOURCES "Source/Lightbleeder.cpp" "Source/Window.cpp")
-set(LIGHTBLEEDER_HEADERS "Include/Lightbleeder.hpp" "Source/Window.cpp")
+file(GLOB CHAINBINDER_SOURCES "Source/*.c" "Include/*.c")
+file(GLOB CHAINBINDER_HEADER "Chainbinder.h")
 
-add_library(Lightbleeder STATIC ${LIGHTBLEEDER_SOURCES} ${LIGHTBLEEDER_HEADERS})
+add_library(Chainbinder STATIC ${CHAINBINDER_SOURCES} ${CHAINBINDER_HEADERS})
 
 find_package(Vulkan REQUIRED)
 
@@ -17,12 +17,13 @@ if(NOT glfw_POPULATED)
 	FetchContent_MakeAvailable(glfw)
 endif()
 
-add_dependencies(Lightbleeder glfw)
-target_include_directories(Lightbleeder PUBLIC "${glfw_SOURCE_DIR}/include" 
-    "${Vulkan_INCLUDE_DIRS}" "Include")
-target_link_libraries(Lightbleeder PUBLIC glfw3)
-message(STATUS ${GLFW_PKG_LIBS})
+add_dependencies(Chainbinder glfw)
+target_include_directories(Chainbinder PUBLIC "${glfw_SOURCE_DIR}/include" 
+    "${Vulkan_INCLUDE_DIRS}" "./")
+target_include_directories(Chainbinder PRIVATE "Include")
+
+target_link_libraries(Chainbinder PUBLIC glfw3)
 if(UNIX)
 	find_package(X11 REQUIRED)
-	target_link_libraries(Lightbleeder PUBLIC rt dl m ${X11_LIBRARIES})
+	target_link_libraries(Chainbinder PUBLIC rt dl m ${X11_LIBRARIES})
 endif()
