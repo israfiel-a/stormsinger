@@ -1,4 +1,4 @@
-file(GLOB CHAINBINDER_SOURCES "Source/*.c" "Include/*.c")
+file(GLOB CHAINBINDER_SOURCES "Source/*.c" "Include/*.h")
 file(GLOB CHAINBINDER_HEADER "Chainbinder.h")
 
 add_library(Chainbinder STATIC ${CHAINBINDER_SOURCES} ${CHAINBINDER_HEADERS})
@@ -27,3 +27,8 @@ if(UNIX)
 	find_package(X11 REQUIRED)
 	target_link_libraries(Chainbinder PUBLIC rt dl m ${X11_LIBRARIES})
 endif()
+
+foreach(file ${CHAINBINDER_SOURCES} ${CHAINBINDER_HEADER})
+    get_filename_component(filename ${file} NAME)
+    set_source_files_properties(${file} PROPERTIES COMPILE_DEFINITIONS -DFILENAME="${filename}")
+endforeach()

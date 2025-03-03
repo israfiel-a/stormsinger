@@ -1,7 +1,7 @@
 #ifndef CHAINBINDER_ROOT_H
 #define CHAINBINDER_ROOT_H
 
-typedef enum chainbinder_error_t
+typedef enum chainbinder_error
 {
     CHAINBINDER_NO_ERROR
 } chainbinder_error_t;

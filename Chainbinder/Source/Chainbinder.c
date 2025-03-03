@@ -1,4 +1,5 @@
 #include <Chainbinder.h>
+#include <Window.h>
 #include <stdio.h>
 
 void Chainbinder_Initialize(int argc, char **argv)
@@ -6,10 +7,10 @@ void Chainbinder_Initialize(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    printf("Hello, world!");
+    _Chainbinder_CreateWindow();
 }
 
-void Chainbinder_CleanUp(void) {}
+void Chainbinder_CleanUp(void) { _Chainbinder_DestroyWindow(); }
 
 void Chainbinder_Run(void) {}
 
