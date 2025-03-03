@@ -21,7 +21,7 @@ add_subdirectory("Abyssguard")  # Pull in the game's code.
 # A list of the compiler options we'll apply to each target.
 set(COMPILER_OPTIONS)
 if(MSVC)
-	list(APPEND COMPILER_OPTIONS /Wall /WX /external:W0 /external:anglebrackets /wd4711)
+	list(APPEND COMPILER_OPTIONS /Wall /WX /external:W0 /external:anglebrackets /wd4711 /wd4710)
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 		list(APPEND COMPILER_OPTIONS /Od /Zi /Zo /EHa /EHr /fsanitize=address /fsanitize=fuzzer
 			/fsanitize-coverage=edge /fsanitize-coverage=inline-8bit-counters
