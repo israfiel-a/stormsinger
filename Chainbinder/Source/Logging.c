@@ -2,23 +2,27 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-void _Chainbinder_Log_INTERNAL(const char *filename, uint32_t line,
-                               chainbinder_log_type_t type,
-                               const char *format, ...)
-{
-    fputc('[', stdout);
-    switch (type)
-    {
-        case CHAINBINDER_VERBOSE: fputs("\033[90m VERB ", stdout); break;
-        case CHAINBINDER_LOG:     fputs(" INFO ", stdout); break;
-        case CHAINBINDER_SUCCESS: fputs("\033[32m  OK  ", stdout); break;
-        case CHAINBINDER_NOTICE:  fputs("\033[93m NOTE ", stdout); break;
-        case CHAINBINDER_WARNING: fputs("\033[33m WARN ", stdout); break;
-        case CHAINBINDER_ERROR:   fputs("\033[31m ERR! ", stdout); break;
-        default:                  break;
-    }
-    fprintf(stdout, "\033[0m] %s @ ln. %.04d: ", filename, line);
+#include <assert.h>
 
+static const chainbinder_u8_t color_codes[] = {90, 0, 32, 93, 33, 31};
+static const char *const string_descriptors[] = {"VERB", "INFO", " OK ",
+                                                 "NOTE", "WARN", "FAIL"};
+
+inline static void LogPrefix(const char *const filename,
+                             chainbinder_u16_t line,
+                             chainbinder_log_type_t type)
+{
+    fprintf(stdout,
+            "[\033[%hhum%s\033[0m] %-12s @ ln. %.04u: ", color_codes[type],
+            string_descriptors[type], filename, line);
+}
+
+void _Chainbinder_Log_INTERNAL(const char *const filename,
+                               chainbinder_u16_t line,
+                               chainbinder_log_type_t type,
+                               const char *const format, ...)
+{
+    LogPrefix(filename, line, type);
     va_list args;
     va_start(args, format);
     vfprintf(stdout, format, args);
@@ -26,21 +30,12 @@ void _Chainbinder_Log_INTERNAL(const char *filename, uint32_t line,
     fputc('\n', stdout);
 }
 
-void _Chainbinder_LogString_INTERNAL(const char *filename, uint32_t line,
+void _Chainbinder_LogString_INTERNAL(const char *const filename,
+                                     chainbinder_u16_t line,
                                      chainbinder_log_type_t type,
-                                     const char *message)
+                                     const char *const message)
 {
-    fputc('[', stdout);
-    switch (type)
-    {
-        case CHAINBINDER_VERBOSE: fputs("\033[90m VERB ", stdout); break;
-        case CHAINBINDER_LOG:     fputs(" INFO ", stdout); break;
-        case CHAINBINDER_SUCCESS: fputs("\033[32m  OK  ", stdout); break;
-        case CHAINBINDER_NOTICE:  fputs("\033[93m NOTE ", stdout); break;
-        case CHAINBINDER_WARNING: fputs("\033[33m WARN ", stdout); break;
-        case CHAINBINDER_ERROR:   fputs("\033[31m ERR! ", stdout); break;
-        default:                  break;
-    }
-    fprintf(stdout, "\033[0m] %s @ ln. %.04d: %s\n", filename, line,
-            message);
+    LogPrefix(filename, line, type);
+    fputs(message, stdout);
+    fputc('\n', stdout);
 }
