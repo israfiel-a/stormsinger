@@ -12,9 +12,8 @@ inline static void LogPrefix(const char *const filename,
                              chainbinder_u16_t line,
                              chainbinder_log_type_t type)
 {
-    fprintf(stdout,
-            "[\033[%hhum%s\033[0m] %-12s @ ln. %.04u: ", color_codes[type],
-            string_descriptors[type], filename, line);
+    fprintf(stdout, "[\033[%hhum%s\033[0m] %-12s @ ln. %.04lu: ",
+            color_codes[type], string_descriptors[type], filename, line);
 }
 
 void _Chainbinder_Log_INTERNAL(const char *const filename,
