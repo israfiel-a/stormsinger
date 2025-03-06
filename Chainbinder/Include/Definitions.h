@@ -6,8 +6,10 @@
     #include <stdbool.h>
 
     #define CHAINBINDER_PACKED
+    #define CHAINBINDER_NULLPTR NULL
 #else
     #define CHAINBINDER_PACKED [[packed]]
+    #define CHAINBINDER_NULLPTR nullptr
 #endif
 
 #define CHAINBINDER_ENUM(name, ...)                                       \

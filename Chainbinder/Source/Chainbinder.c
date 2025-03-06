@@ -7,7 +7,7 @@ void Chainbinder_Initialize(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    _Chainbinder_CreateWindow();
+    _Chainbinder_CreateWindow("TEST");
 }
 
 void Chainbinder_CleanUp(void) { _Chainbinder_DestroyWindow(); }
