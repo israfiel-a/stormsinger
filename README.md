@@ -12,6 +12,12 @@ Stormsinger is a small and simple infinite driving game (inspired by [the Long D
 ### Dependencies & Support
 Stormsinger uses the [Vulkan rendering API](https://www.vulkan.org/) and the [GLFW windowing library](https://www.glfw.org/) to accomplish its work. Beyond those, it needs nothing but OS-provided components. Stormsinger supports Windows XP and later, if you've got a Vulkan-compatible graphics card (somehow). It also supports most graphical distributions of Linux, so long as your kernel is fairly recent, you have Vulkan drivers, and you've got [Wayland](https://wayland.freedesktop.org/) or [X11](https://www.x.org/wiki/) as a windowing system. MacOS is not supported, and not planned. Stormsinger builds using [CMake](https://cmake.org/), but it's not too complicated to build manually via something like raw [Makefiles](https://www.gnu.org/software/make/) or [Meson](https://mesonbuild.com/).
 
+Tested architectures:
+- Microsoft Windows 10
+	- Visual Studio 2022 (cl)
+		- x86_64 (Debug, Release)
+		- x86_86 (Debug, Release)
+
 ---
 
 ![bottom_banner](./.github/banner.jpg)
