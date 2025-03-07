@@ -7,12 +7,12 @@ void Chainbinder_Initialize(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    _Chainbinder_CreateWindow("TEST");
+    Chainbinder_CreateWindow("TEST");
 }
 
-void Chainbinder_CleanUp(void) { _Chainbinder_DestroyWindow(); }
+void Chainbinder_CleanUp(void) { Chainbinder_DestroyWindow(); }
 
-void Chainbinder_Run(void) {}
+void Chainbinder_Run(void) { Chainbinder_RunWindow(); }
 
 // TODO: Not yet implemented.
 chainbinder_error_t Chainbinder_GetError(void)

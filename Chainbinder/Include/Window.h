@@ -3,7 +3,8 @@
 
 #include <Definitions.h>
 
-bool _Chainbinder_CreateWindow(const char *const title);
-void _Chainbinder_DestroyWindow(void);
+bool Chainbinder_CreateWindow(const char *const title);
+void Chainbinder_DestroyWindow(void);
+void Chainbinder_RunWindow(void);
 
 #endif // CHAINBINDER_WINDOW_H

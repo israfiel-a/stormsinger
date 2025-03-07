@@ -18,10 +18,10 @@ inline static void LogPrefix(const char *const filename,
             color_codes[type], string_descriptors[type], filename, line);
 }
 
-void _Chainbinder_Log_INTERNAL(const char *const filename,
-                               chainbinder_u16_t line,
-                               chainbinder_log_type_t type,
-                               const char *const format, ...)
+void Chainbinder_Log_INTERNAL(const char *const filename,
+                              chainbinder_u16_t line,
+                              chainbinder_log_type_t type,
+                              const char *const format, ...)
 {
     LogPrefix(filename, line, type);
     va_list args;
@@ -31,10 +31,10 @@ void _Chainbinder_Log_INTERNAL(const char *const filename,
     fputc('\n', stdout);
 }
 
-void _Chainbinder_LogString_INTERNAL(const char *const filename,
-                                     chainbinder_u16_t line,
-                                     chainbinder_log_type_t type,
-                                     const char *const message)
+void Chainbinder_LogString_INTERNAL(const char *const filename,
+                                    chainbinder_u16_t line,
+                                    chainbinder_log_type_t type,
+                                    const char *const message)
 {
     LogPrefix(filename, line, type);
     fputs(message, stdout);

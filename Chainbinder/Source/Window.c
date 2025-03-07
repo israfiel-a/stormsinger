@@ -8,18 +8,18 @@ static GLFWwindow *window_handle = CHAINBINDER_NULLPTR;
 
 static void ErrorCallback(int code, const char *description)
 {
-    _Chainbinder_Log(CHAINBINDER_ERROR,
-                     "Got GLFW error %d. Description: %s", code,
-                     description);
+    Chainbinder_Log(CHAINBINDER_ERROR,
+                    "Got GLFW error %d. Description: %s", code,
+                    description);
 }
 
-bool _Chainbinder_CreateWindow(const char *const title)
+bool Chainbinder_CreateWindow(const char *const title)
 {
     glfwSetErrorCallback(ErrorCallback);
     if (!glfwInit())
     {
-        _Chainbinder_LogString(CHAINBINDER_ERROR,
-                               "Failed to initialize GLFW.");
+        Chainbinder_LogString(CHAINBINDER_ERROR,
+                              "Failed to initialize GLFW.");
         return false;
     }
 
@@ -48,16 +48,22 @@ bool _Chainbinder_CreateWindow(const char *const title)
         width, height, title, CHAINBINDER_NULLPTR, CHAINBINDER_NULLPTR);
     if (window_handle == CHAINBINDER_NULLPTR)
     {
-        _Chainbinder_LogString(CHAINBINDER_ERROR,
-                               "Failed to create GLFW window.");
+        Chainbinder_LogString(CHAINBINDER_ERROR,
+                              "Failed to create GLFW window.");
         return false;
     }
 
     return true;
 }
 
-void _Chainbinder_DestroyWindow(void)
+void Chainbinder_DestroyWindow(void)
 {
     glfwDestroyWindow(window_handle);
     glfwTerminate();
+}
+
+void Chainbinder_RunWindow(void)
+{
+    glfwShowWindow(window_handle);
+    while (!glfwWindowShouldClose(window_handle)) glfwPollEvents();
 }
