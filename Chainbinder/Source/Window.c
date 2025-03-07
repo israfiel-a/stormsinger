@@ -1,6 +1,7 @@
 #include <Logging.h>
 #include <Window.h>
 
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
 static GLFWwindow *window_handle = CHAINBINDER_NULLPTR;
