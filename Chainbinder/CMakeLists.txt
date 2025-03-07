@@ -30,5 +30,5 @@ endif()
 
 foreach(file ${CHAINBINDER_SOURCES} ${CHAINBINDER_HEADER})
     get_filename_component(filename ${file} NAME)
-    set_source_files_properties(${file} PROPERTIES COMPILE_DEFINITIONS -DFILENAME="${filename}")
+    set_source_files_properties(${file} PROPERTIES COMPILE_DEFINITIONS FILENAME="${filename}")
 endforeach()
