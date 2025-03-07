@@ -8,7 +8,7 @@
     #define CHAINBINDER_PACKED
     #define CHAINBINDER_NULLPTR NULL
 #else
-    #define CHAINBINDER_PACKED [[packed]]
+    #define CHAINBINDER_PACKED __attribute__((__packed__))
     #define CHAINBINDER_NULLPTR nullptr
 #endif
 
@@ -18,6 +18,7 @@
         __VA_ARGS__                                                       \
     } name
 
+#include <inttypes.h>
 #include <stdint.h>
 
 typedef uint_fast8_t chainbinder_u8_t;
