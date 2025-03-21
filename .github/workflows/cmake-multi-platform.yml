@@ -6,9 +6,9 @@ on:
     paths-ignore:
         - "**/README.md"
         - "**/LICENSE.md"
-        - ".gitattributes"
         - ".gitignore"
         - "CMakePresets.json"
+        - ".clang-format"
   pull_request:
     branches: [ "master" ]
 
