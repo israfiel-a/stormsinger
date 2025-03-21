@@ -2,7 +2,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#if STRIP_LOG_METADATA == false
+#if !STORMSINGER_STRIP_LOG_METADATA
 
 static const chainbinder_u8_t color_codes[] = {90, 0, 32, 93, 33, 31};
 static const char *const string_descriptors[] = {"VERB", "INFO", " OK ",
@@ -24,7 +24,7 @@ void(Chainbinder_Log)(const char *const filename, chainbinder_u16_t line,
                       chainbinder_log_type_t type,
                       const char *const format, ...)
 {
-#if STRIP_LOG_METADATA == false
+#if !STORMSINGER_STRIP_LOG_METADATA
     LogPrefix(filename, line, type);
 #else
     (void)filename;

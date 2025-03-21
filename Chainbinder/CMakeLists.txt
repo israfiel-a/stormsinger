@@ -23,6 +23,8 @@ target_include_directories(Chainbinder PUBLIC "${glfw_SOURCE_DIR}/include"
     "${Vulkan_INCLUDE_DIRS}" "./")
 target_include_directories(Chainbinder PRIVATE "Include")
 
+target_compile_options(Chainbinder PRIVATE ${STORMSINGER_COMPILER_OPTIONS})
+
 target_link_libraries(Chainbinder PUBLIC glfw3 Vulkan::Vulkan)
 if(UNIX)
 	find_package(X11 REQUIRED)

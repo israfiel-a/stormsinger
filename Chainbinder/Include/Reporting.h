@@ -11,9 +11,9 @@ void(Chainbinder_Log)(const char *const filename, chainbinder_u16_t line,
                       chainbinder_log_type_t type,
                       const char *const format, ...);
 
-#if DISABLE_LOGS != false
+#if STORMSINGER_DISABLE_LOGS
     #define Chainbinder_Log(...)
-#elif STRIP_LOG_METADATA != false
+#elif STORMSINGER_STRIP_LOG_METADATA
     #define Chainbinder_Log(type, format, ...)                            \
         Chainbinder_Log(NULL, 0, type, format __VA_OPT__(, ) __VA_ARGS__)
 #else

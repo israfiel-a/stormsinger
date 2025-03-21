@@ -13,6 +13,10 @@ static void ErrorCallback(int code, const char *description)
     Chainbinder_Log(CHAINBINDER_ERROR,
                     "Got GLFW error %d. Description: %s", code,
                     description);
+
+    // Reference the parameters so MSVC doesn't whinge in relmode.
+    (void)code;
+    (void)description;
 }
 
 static inline bool InitializeGLFW(void)

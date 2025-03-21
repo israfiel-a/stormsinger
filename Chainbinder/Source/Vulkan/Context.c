@@ -25,7 +25,9 @@ static inline void AssembleApplication(VkApplicationInfo *applicationInfo)
     applicationCreateInfo.pNext = CHAINBINDER_NULLPTR;
 
     applicationCreateInfo.apiVersion = VK_API_VERSION_1_0;
-    applicationCreateInfo.applicationVersion = VK_MAKE_VERSION(0, 1, 1);
+    applicationCreateInfo.applicationVersion = VK_MAKE_VERSION(
+        STORMSINGER_VERSION_MAJOR, STORMSINGER_VERSION_MINOR,
+        STORMSINGER_VERSION_PATCH);
     applicationCreateInfo.engineVersion =
         applicationCreateInfo.applicationVersion;
 
@@ -33,7 +35,10 @@ static inline void AssembleApplication(VkApplicationInfo *applicationInfo)
     applicationCreateInfo.pEngineName = "Chainbinder";
     *applicationInfo = applicationCreateInfo;
     Chainbinder_Log(CHAINBINDER_VERBOSE,
-                    "Assembled application information.");
+                    "Assembled application information (%s, v%d.%d.%d).",
+                    applicationCreateInfo.pApplicationName,
+                    STORMSINGER_VERSION_MAJOR, STORMSINGER_VERSION_MINOR,
+                    STORMSINGER_VERSION_PATCH);
 }
 
 static inline bool
