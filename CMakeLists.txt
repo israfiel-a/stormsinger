@@ -45,7 +45,7 @@ if(MSVC)
 		add_link_options(/LTCG)
 	endif()
 else()
-	list(APPEND COMPILER_OPTIONS -Wall -Wextra -Werror -Wpedantic -Wgnu-zero-variadic-macro-arguments)
+	list(APPEND COMPILER_OPTIONS -Wall -Wextra -Werror -Wpedantic -Wno-gnu-zero-variadic-macro-arguments)
 	# TODO: Add more options when next on Linux machine.
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 		list(APPEND COMPILER_OPTIONS -O0 -g)
