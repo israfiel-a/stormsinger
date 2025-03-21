@@ -3,13 +3,19 @@
 #include <Window.h>
 #include <stdio.h>
 
-void Chainbinder_Initialize(int argc, char **argv)
+bool Chainbinder_Initialize(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
 
-    Chainbinder_CreateVulkanInstance();
-    Chainbinder_CreateWindow("TEST", CHAINBINDER_SPLASHSCREEN);
+    if (!Chainbinder_CreateWindow("TEST", CHAINBINDER_SPLASHSCREEN))
+        return false;
+    // I would like to do this before creating the window, but GLFW
+    // requires some extensions and in order to grab them, we need to have
+    // the library initialized.
+    if (!Chainbinder_CreateVulkanInstance()) return false;
+
+    return true;
 }
 
 void Chainbinder_CleanUp(void)
