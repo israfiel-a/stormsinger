@@ -7,10 +7,14 @@ void Chainbinder_Initialize(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    Chainbinder_CreateWindow("TEST");
+    Chainbinder_CreateWindow("TEST", CHAINBINDER_SPLASHSCREEN);
 }
 
-void Chainbinder_CleanUp(void) { Chainbinder_DestroyWindow(); }
+void Chainbinder_CleanUp(void)
+{
+    Chainbinder_DestroyWindow();
+    Chainbinder_CleanupWindows();
+}
 
 void Chainbinder_Run(void) { Chainbinder_RunWindow(); }
 

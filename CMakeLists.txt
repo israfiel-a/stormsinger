@@ -2,9 +2,23 @@
 project("Stormsinger" LANGUAGES C VERSION 0.1.0 DESCRIPTION 
 	"Stormsinger is an infinite driving game set in the Leto universe")
 
+if(NOT EXISTS CMAKE_BUILD_TYPE)
+	message(WARNING "No build type provided. Defaulting to debug.")
+	set(CMAKE_BUILD_TYPE "Debug")
+endif()
+
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+	set(STORMSINGER_RELEASE true)
+else()
+	set(STORMSINGER_RELEASE false)
+endif()
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Stormsinger)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Chainbinder)
 link_directories("${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
+
+option(STORMSINGER_STRIP_LOG_METADATA "Strip things like the filename from logs." ${STORMSINGER_RELEASE})
+option(STORMSINGER_DISABLE_LOGS "Disable all output logs." false)
 
 # Damn you Microsoft. Damn you.
 if(MSVC)
@@ -43,3 +57,7 @@ endif()
 target_compile_options(Chainbinder PRIVATE ${COMPILER_OPTIONS})
 target_compile_options(Sunbringer PRIVATE ${COMPILER_OPTIONS})
 target_compile_options(Stormsinger PRIVATE ${COMPILER_OPTIONS})
+
+target_compile_definitions(Chainbinder PRIVATE 
+	"STRIP_LOG_METADATA=$<BOOL:${STORMSINGER_STRIP_LOG_METADATA}>" 
+	"DISABLE_LOGS=$<BOOL:${STORMSINGER_DISABLE_LOGS}>")
