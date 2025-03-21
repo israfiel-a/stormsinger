@@ -1,4 +1,5 @@
-file(GLOB CHAINBINDER_SOURCES "Source/*.c" "Include/*.h")
+file(GLOB CHAINBINDER_SOURCES "Source/*.c" "Include/*.h" "Source/Vulkan/*.c" 
+	"Include/Vulkan/*.h")
 file(GLOB CHAINBINDER_HEADER "Chainbinder.h")
 
 add_library(Chainbinder STATIC ${CHAINBINDER_SOURCES} ${CHAINBINDER_HEADERS})
@@ -22,7 +23,7 @@ target_include_directories(Chainbinder PUBLIC "${glfw_SOURCE_DIR}/include"
     "${Vulkan_INCLUDE_DIRS}" "./")
 target_include_directories(Chainbinder PRIVATE "Include")
 
-target_link_libraries(Chainbinder PUBLIC glfw3)
+target_link_libraries(Chainbinder PUBLIC glfw3 Vulkan::Vulkan)
 if(UNIX)
 	find_package(X11 REQUIRED)
 	target_link_libraries(Chainbinder PUBLIC rt dl m ${X11_LIBRARIES})
