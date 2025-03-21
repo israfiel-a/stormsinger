@@ -29,7 +29,8 @@ endif()
 ## Project Configuration Options
 ############################################################################
 
-option(STORMSINGER_STRIP_LOG_METADATA "Strip things like the filename from logs.")
+option(STORMSINGER_STRIP_LOG_METADATA 
+	"Strip things like the filename from logs.")
 set(STORMSINGER_STRIP_LOG_METADATA ${STORMSINGER_RELEASE} CACHE BOOL 
 	"Strip things like the filename from logs." FORCE)
 
@@ -74,15 +75,16 @@ if(MSVC)
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 		list(APPEND STORMSINGER_COMPILER_OPTIONS /Od /Zi /Zo /EHa /EHr 
 			/fsanitize=address /fsanitize=fuzzer /fsanitize-coverage=edge 
-			/fsanitize-coverage=inline-8bit-counters /fsanitize-coverage=trace-cmp 
-			/fsanitize-coverage=trace-div)
+			/fsanitize-coverage=inline-8bit-counters 
+			/fsanitize-coverage=trace-cmp /fsanitize-coverage=trace-div)
 	else()
-		list(APPEND STORMSINGER_COMPILER_OPTIONS /O2 /fp:fast /GL /GS- /Gw /Qpar)
+		list(APPEND STORMSINGER_COMPILER_OPTIONS /O2 /fp:fast /GL /GS- 
+			/Gw /Qpar)
 		add_link_options(/LTCG)
 	endif()
 else()
-	list(APPEND STORMSINGER_COMPILER_OPTIONS -Wall -Wextra -Werror -Wpedantic 
-		-Wno-gnu-zero-variadic-macro-arguments)
+	list(APPEND STORMSINGER_COMPILER_OPTIONS -Wall -Wextra -Werror 
+		-Wpedantic -Wno-gnu-zero-variadic-macro-arguments)
 
 	# TODO: Add more options when next on Linux machine.
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
