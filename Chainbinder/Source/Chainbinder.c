@@ -1,7 +1,25 @@
+/**
+ * @file Chainbinder.c
+ * @author Israfiel Argos (israfiel-a)
+ * @brief This file provides the implementation of the public interface for
+ * Chainbinder.
+ *
+ * @since 0.1.0
+ * @updated 0.1.1
+ *
+ * @copyright (c) 2024-2025 - Israfil Argos
+ * This document is under the GNU Affero General Public License v3.0. It
+ * can be modified and distributed (commercially or otherwise) freely, and
+ * can be used privately and within patents. No liability or warranty is
+ * guaranteed. However, on use, the user must state license and copyright,
+ * any changes made, and disclose the source of the document. For more
+ * information see the @file LICENSE.md file included with this
+ * distribution of the source code, or https://www.gnu.org/licenses/agpl.
+ */
+
 #include <Chainbinder.h>
 #include <Vulkan/Context.h>
 #include <Window.h>
-#include <stdio.h>
 
 bool Chainbinder_Initialize(int argc, char **argv)
 {
@@ -30,5 +48,5 @@ void Chainbinder_Run(void) { Chainbinder_RunWindow(); }
 // TODO: Not yet implemented.
 chainbinder_error_t Chainbinder_GetError(void)
 {
-    return CHAINBINDER_NO_ERROR;
+    return CHAINBINDER_FAILED_NONE;
 }

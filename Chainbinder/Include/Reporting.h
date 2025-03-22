@@ -1,7 +1,7 @@
 #ifndef CHAINBINDER_LOGGING_H
 #define CHAINBINDER_LOGGING_H
 
-#include <Definitions.h>
+#include <Chainbinder.h>
 
 CHAINBINDER_ENUM(chainbinder_log_type_t, CHAINBINDER_VERBOSE,
                  CHAINBINDER_LOG, CHAINBINDER_SUCCESS, CHAINBINDER_NOTICE,

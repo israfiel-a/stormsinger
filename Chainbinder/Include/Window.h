@@ -1,7 +1,7 @@
 #ifndef CHAINBINDER_WINDOW_H
 #define CHAINBINDER_WINDOW_H
 
-#include <Definitions.h>
+#include <Chainbinder.h>
 
 CHAINBINDER_ENUM(chainbinder_window_type_t, CHAINBINDER_SPLASHSCREEN,
                  CHAINBINDER_GAMEWINDOW);
