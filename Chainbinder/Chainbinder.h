@@ -68,7 +68,7 @@
      * @updated 0.1.1
      */
     #define CHAINBINDER_NULLPTR nullptr
-#endif
+#endif // _MSC_VER
 
 /**
  * @brief An enumerator blueprint to create (potentially) packed
