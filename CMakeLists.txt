@@ -92,7 +92,7 @@ if(MSVC)
 else()
 	list(APPEND STORMSINGER_COMPILER_OPTIONS -Wall -Wextra -Werror 
 		-Wpedantic -Wno-gnu-zero-variadic-macro-arguments)
-        
+
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         # Note that, in order for sanitize=pointer-compare to properly work
         # at runtime, one has to add detect_invalid_pointer_pairs=2 to their
@@ -107,8 +107,13 @@ else()
             list(APPEND STORMSINGER_COMPILER_OPTIONS -fanalyzer)
         endif()
 	else()
-		list(APPEND STORMSINGER_COMPILER_OPTIONS -Ofast 
-            -favoid-store-forwarding -fira-hoist-pressure)
+		list(APPEND STORMSINGER_COMPILER_OPTIONS -Ofast)
+
+        if(CMAKE_C_COMPILER_ID STREQUAL "GNU" AND NOT 
+            STORMSINGER_USING_CLANGD)
+            list(APPEND STORMSINGER_COMPILER_OPTIONS 
+                -favoid-store-forwarding -fira-hoist-pressure)
+        endif()
 	endif()
 endif()
 
