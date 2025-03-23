@@ -88,6 +88,10 @@ static inline bool InitializeGLFW(void)
     }
 
     glfwSetErrorCallback(ErrorCallback);
+
+    // I HATE libdecor's decorations--and we don't need it, anyway. None of
+    // the created windows are decorated.
+    glfwInitHint(GLFW_WAYLAND_LIBDECOR, GLFW_WAYLAND_DISABLE_LIBDECOR);
     if (!glfwInit())
     {
         Chainbinder_Log(CHAINBINDER_ERROR, "Failed to initialize GLFW.");
@@ -115,13 +119,13 @@ static inline void SetHints(const GLFWvidmode *resolution, int *width,
     glfwDefaultWindowHints();
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+    glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
     if (window_type == CHAINBINDER_SPLASHSCREEN)
     {
         *width = resolution->width >> 2;
         *height = resolution->height >> 2;
 
-        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     }
     else

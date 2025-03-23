@@ -19,6 +19,7 @@ if(NOT DEFINED CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
 	set(STORMSINGER_RELEASE ON)
 else()
@@ -37,6 +38,12 @@ set(STORMSINGER_STRIP_LOG_METADATA ${STORMSINGER_RELEASE} CACHE BOOL
 option(STORMSINGER_DISABLE_LOGS "Disable all output logs.")
 set(STORMSINGER_DISABLE_LOGS ${STORMSINGER_RELEASE} CACHE BOOL 
 	"Disable all output logs." FORCE)
+
+option(STORMSINGER_USE_X11 "Use X11 over Wayland for windowing." OFF)
+
+# This disables flags that'll give clangd trouble, specifically -fanalyzer.
+option(STORMSINGER_USING_CLANGD 
+    "The clangd language server will be used post-compilation." OFF)
 
 ############################################################################
 ## Output Directories
@@ -85,12 +92,23 @@ if(MSVC)
 else()
 	list(APPEND STORMSINGER_COMPILER_OPTIONS -Wall -Wextra -Werror 
 		-Wpedantic -Wno-gnu-zero-variadic-macro-arguments)
-
-	# TODO: Add more options when next on Linux machine.
+        
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-		list(APPEND STORMSINGER_COMPILER_OPTIONS -O0 -g)
+        # Note that, in order for sanitize=pointer-compare to properly work
+        # at runtime, one has to add detect_invalid_pointer_pairs=2 to their
+        # ASAN_OPTIONS ENV variable.
+		list(APPEND STORMSINGER_COMPILER_OPTIONS -Og -g3 -ggdb
+            -fsanitize=address -fsanitize=pointer-compare -fsanitize=leak
+            -fsanitize=pointer-subtract -fsanitize=undefined)
+        add_link_options(-fsanitize=address -fsanitize=undefined)
+
+        if(CMAKE_C_COMPILER_ID STREQUAL "GNU" AND NOT 
+            STORMSINGER_USING_CLANGD)
+            list(APPEND STORMSINGER_COMPILER_OPTIONS -fanalyzer)
+        endif()
 	else()
-		list(APPEND STORMSINGER_COMPILER_OPTIONS -O3)
+		list(APPEND STORMSINGER_COMPILER_OPTIONS -Ofast 
+            -favoid-store-forwarding -fira-hoist-pressure)
 	endif()
 endif()
 

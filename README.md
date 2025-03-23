@@ -17,6 +17,9 @@ Tested architectures:
 	- Visual Studio 2022 (cl)
 		- x86_64 (Debug, Release)
 		- x86_86 (Debug, Release)
+- Linux
+	- GCC @L v14.2.1
+        - x86_64 WAYLAND (Debug, Release)
 
 ---
 

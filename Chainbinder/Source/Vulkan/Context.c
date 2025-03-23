@@ -12,8 +12,11 @@ static inline bool GetGLFWSupport(uint32_t *extensionCount,
 {
     int supportFlag = glfwVulkanSupported();
     if (supportFlag != GLFW_TRUE) return false;
-    *extensions = glfwGetRequiredInstanceExtensions(extensionCount);
-    if (extensions == CHAINBINDER_NULLPTR) return false;
+
+    const char **reported_extensions =
+        glfwGetRequiredInstanceExtensions(extensionCount);
+    if (reported_extensions == CHAINBINDER_NULLPTR) return false;
+    *extensions = reported_extensions;
 
     return true;
 }

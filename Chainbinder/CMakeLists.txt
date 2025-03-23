@@ -35,6 +35,11 @@ if(NOT glfw_POPULATED)
 		"Build the GLFW example programs")
     set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build the GLFW documentation")
     set(GLFW_INSTALL OFF CACHE INTERNAL "Generate installation target")
+
+    if(STORMSINGER_USE_X11)
+        set(GLFW_BUILD_WAYLAND OFF CACHE INTERNAL "Build support for Wayland")
+        set(GLFW_BUILD_X11 ON CACHE INTERNAL "Build support for X11")
+    endif()
 endif()
 
 ############################################################################
