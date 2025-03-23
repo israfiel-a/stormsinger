@@ -108,12 +108,6 @@ else()
         endif()
 	else()
 		list(APPEND STORMSINGER_COMPILER_OPTIONS -Ofast)
-
-        if(CMAKE_C_COMPILER_ID STREQUAL "GNU" AND NOT 
-            STORMSINGER_USING_CLANGD)
-            list(APPEND STORMSINGER_COMPILER_OPTIONS 
-                -favoid-store-forwarding -fira-hoist-pressure)
-        endif()
 	endif()
 endif()
 
