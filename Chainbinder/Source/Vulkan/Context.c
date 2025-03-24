@@ -1,3 +1,22 @@
+/**
+ * @file Vulkan/Context.c
+ * @author Israfiel Argos (israfiel-a)
+ * @brief This file provides the implementation of the Vulkan instance
+ * creation interface.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ *
+ * @copyright (c) 2024-2025 - Israfil Argos
+ * This document is under the GNU Affero General Public License v3.0. It
+ * can be modified and distributed (commercially or otherwise) freely, and
+ * can be used privately and within patents. No liability or warranty is
+ * guaranteed. However, on use, the user must state license and copyright,
+ * any changes made, and disclose the source of the document. For more
+ * information see the @file LICENSE.md file included with this
+ * distribution of the source code, or https://www.gnu.org/licenses/agpl.
+ */
+
 #include <Reporting.h>
 #include <Vulkan/Context.h>
 #include <Vulkan/Definitions.h>
@@ -5,8 +24,27 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
+/**
+ * @brief The Vulkan instance currently created.
+ */
 static VkInstance instance = CHAINBINDER_NULLPTR;
 
+/**
+ * @brief Get the GLFW support details for Vulkan on this machine.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ *
+ * @param extensionCount The place to store the count of instance
+ * extensions GLFW requires.
+ * @param extensions The place to store the array of extension names that
+ * we'll use to enable all GLFW-required instance extensions.
+ *
+ * @returns A boolean flag representing whether or not Vulkan is supported
+ * on this system. Unless this is truthy, any data within the
+ * extensionCount and extensions parameters is not guaranteed to mean
+ * anything.
+ */
 static inline bool GetGLFWSupport(uint32_t *extensionCount,
                                   const char ***extensions)
 {
@@ -21,6 +59,16 @@ static inline bool GetGLFWSupport(uint32_t *extensionCount,
     return true;
 }
 
+/**
+ * @brief Assemble the application information structure to be sent off to
+ * Vulkan.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ *
+ * @param applicationInfo The storage place for the created application
+ * info.
+ */
 static inline void AssembleApplication(VkApplicationInfo *applicationInfo)
 {
     VkApplicationInfo applicationCreateInfo = {0};
@@ -44,6 +92,21 @@ static inline void AssembleApplication(VkApplicationInfo *applicationInfo)
                     STORMSINGER_VERSION_PATCH);
 }
 
+/**
+ * @brief Assemble the instance creation information structure. This also
+ * decides what validation layers and extensions our instance is going to
+ * have.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ *
+ * @param applicationInfo The application information structure.
+ * @param instanceInfo The place to store the created instance information
+ * structure.
+ *
+ * @returns A boolean representing the success of polling GLFW for
+ * extensions.
+ */
 static inline bool
 AssembleInstance(const VkApplicationInfo *applicationInfo,
                  VkInstanceCreateInfo *instanceInfo)
