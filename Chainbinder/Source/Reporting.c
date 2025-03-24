@@ -57,7 +57,6 @@ static const char *const string_descriptors[] = {"VERB", "INFO", " OK ",
 CHAINBINDER_FLATTEN
 CHAINBINDER_ALWAYSINLINE
 CHAINBINDER_NONNULL(1, 2)
-CHAINBINDER_NULL_TERMINATED(2)
 inline static void LogPrefix(FILE *const output,
                              const char *const filename,
                              chainbinder_u16_t line,
