@@ -29,7 +29,7 @@
  * @since 0.1.1
  * @updated 0.1.1
  */
-static const chainbinder_u8_t color_codes[] = {90, 0, 32, 93, 33, 31};
+static chainbinder_u8_t color_codes[] = {90, 0, 32, 93, 33, 31};
 
 /**
  * @brief Decoration strings for each of the log types. All are four
@@ -54,6 +54,10 @@ static const char *const string_descriptors[] = {"VERB", "INFO", " OK ",
  * @param type The type of log we're sending. This decides the decoration
  * prefix.
  */
+CHAINBINDER_FLATTEN
+CHAINBINDER_ALWAYSINLINE
+CHAINBINDER_NONNULL(1, 2)
+CHAINBINDER_NULL_TERMINATED(2)
 inline static void LogPrefix(FILE *const output,
                              const char *const filename,
                              chainbinder_u16_t line,

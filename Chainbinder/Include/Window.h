@@ -46,6 +46,9 @@ CHAINBINDER_ENUM(chainbinder_window_type_t, CHAINBINDER_SPLASHSCREEN,
  *
  * @returns A boolean flag representing the success of this operation.
  */
+CHAINBINDER_NULL_TERMINATED(1)
+CHAINBINDER_NONNULL(1)
+CHAINBINDER_NOIGNORE
 bool Chainbinder_CreateWindow(const char *const title,
                               chainbinder_window_type_t type);
 

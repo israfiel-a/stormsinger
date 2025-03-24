@@ -33,6 +33,7 @@
  * @returns A boolean value representing whether or not the instance was
  * created successfully.
  */
+CHAINBINDER_NOIGNORE
 bool Chainbinder_CreateVulkanInstance(void);
 
 /**

@@ -69,7 +69,87 @@
      */
     #define CHAINBINDER_NULLPTR nullptr
 
+    /**
+     * @brief The given arguments MUST be non-null.
+     *
+     * @since 0.1.1
+     * @updated 0.1.1
+     */
     #define CHAINBINDER_NONNULL(...) [[gnu::nonnull(__VA_ARGS__)]]
+
+    /**
+     * @brief This function NEVER returns null.
+     *
+     * @since 0.1.1
+     * @updated 0.1.1
+     */
+    #define CHAINBINDER_RETURNS_NONNULL(...) [[gnu::returns_nonnull]]
+
+    /**
+     * @brief This function should be mushed down and inlined as much as
+     * physically possible.
+     *
+     * @since 0.1.1
+     * @updated 0.1.1
+     */
+    #define CHAINBINDER_FLATTEN [[gnu::flatten]]
+
+    /**
+     * @brief The return value of this function should not be null.
+     *
+     * @since 0.1.1
+     * @updated 0.1.1
+     */
+    #define CHAINBINDER_NOIGNORE [[nodiscard]]
+
+    /**
+     * @brief This function is a printf-style output method.
+     *
+     * @since 0.1.1
+     * @updated 0.1.1
+     */
+    #define CHAINBINDER_PRINTF(format_string, args)                       \
+        [[gnu::format(printf, format_string, args)]]
+
+    /**
+     * @brief This function will be called often, and should be set
+     * aside for expressly that reason.
+     *
+     * @since 0.1.1
+     * @updated 0.1.1
+     */
+    #define CHAINBINDER_HOT [[gnu::hot]]
+
+    /**
+     * @brief This function should always be inlined, regardless of the
+     * compiler's opinion (sort of).
+     *
+     * @since 0.1.1
+     * @updated 0.1.1
+     */
+    #define CHAINBINDER_ALWAYSINLINE [[gnu::always_inline]]
+
+    // Clang whines about this attribute.
+    #ifndef __clang__
+        /**
+         * @brief This function has string arguments that should be
+         * null-terminated.
+         *
+         * @since 0.1.1
+         * @updated 0.1.1
+         */
+        #define CHAINBINDER_NULL_TERMINATED(...)                          \
+            [[gnu::null_terminated_string_arg(__VA_ARGS__)]]
+    #else
+        /**
+         * @brief This function has string arguments that should be
+         * null-terminated.
+         *
+         * @since 0.1.1
+         * @updated 0.1.1
+         */
+        #define CHAINBINDER_NULL_TERMINATED(...)
+    #endif
 #endif // _MSC_VER
 
 /**
@@ -199,6 +279,8 @@ CHAINBINDER_ENUM(chainbinder_error_t, CHAINBINDER_FAILED_NONE,
  * @returns A boolean value expressing whether or not the initialization
  * succeeded.
  */
+CHAINBINDER_NOIGNORE
+CHAINBINDER_NONNULL(2)
 bool Chainbinder_Initialize(int argc, char **argv);
 
 /**
@@ -238,6 +320,7 @@ void Chainbinder_Run(void);
  *
  * @returns The most recently recorded error code.
  */
+CHAINBINDER_NOIGNORE
 chainbinder_error_t Chainbinder_GetError(void);
 
 #endif // CHAINBINDER_ROOT_H

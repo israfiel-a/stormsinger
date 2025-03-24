@@ -56,6 +56,7 @@ static bool glfw_initialized = false;
  * @param code The error code reported.
  * @param description A short, human-readable description of the error.
  */
+CHAINBINDER_NONNULL(2)
 static void ErrorCallback(int code, const char *description)
 {
     Chainbinder_Log(CHAINBINDER_ERROR,
@@ -78,6 +79,7 @@ static void ErrorCallback(int code, const char *description)
  *
  * @returns A boolean flag representing the success of the operation.
  */
+CHAINBINDER_NOIGNORE
 static inline bool InitializeGLFW(void)
 {
     if (glfw_initialized)
@@ -113,6 +115,7 @@ static inline bool InitializeGLFW(void)
  * @param width A place to store the desired width for the window.
  * @param height A place to store the desired height for the window.
  */
+CHAINBINDER_NONNULL(1, 2, 3)
 static inline void SetHints(const GLFWvidmode *resolution, int *width,
                             int *height)
 {

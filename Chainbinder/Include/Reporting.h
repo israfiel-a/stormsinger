@@ -51,6 +51,10 @@ CHAINBINDER_ENUM(chainbinder_log_type_t, CHAINBINDER_VERBOSE,
  * @param ... An arguments to be inserted into the format string,
  * printf-style.
  */
+CHAINBINDER_NONNULL(4)
+CHAINBINDER_PRINTF(4, 5)
+CHAINBINDER_HOT
+CHAINBINDER_NULL_TERMINATED(1, 4)
 void(Chainbinder_Log)(const char *const filename, chainbinder_u16_t line,
                       chainbinder_log_type_t type,
                       const char *const format, ...);
