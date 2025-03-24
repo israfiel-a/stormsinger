@@ -128,28 +128,6 @@
      * @updated 0.1.1
      */
     #define CHAINBINDER_ALWAYSINLINE [[gnu::always_inline]]
-
-    // Clang whines about this attribute.
-    #ifndef __clang__
-        /**
-         * @brief This function has string arguments that should be
-         * null-terminated.
-         *
-         * @since 0.1.1
-         * @updated 0.1.1
-         */
-        #define CHAINBINDER_NULL_TERMINATED(...)                          \
-            [[gnu::null_terminated_string_arg(__VA_ARGS__)]]
-    #else
-        /**
-         * @brief This function has string arguments that should be
-         * null-terminated.
-         *
-         * @since 0.1.1
-         * @updated 0.1.1
-         */
-        #define CHAINBINDER_NULL_TERMINATED(...)
-    #endif
 #endif // _MSC_VER
 
 /**
