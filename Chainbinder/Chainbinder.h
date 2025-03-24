@@ -57,7 +57,7 @@
      * @since 0.1.0
      * @updated 0.1.1
      */
-    #define CHAINBINDER_PACKED __attribute__((__packed__))
+    #define CHAINBINDER_PACKED [[gnu::packed]]
 
     /**
      * @brief A value corresponding a pointer "to nowhere" of sorts.
@@ -68,6 +68,8 @@
      * @updated 0.1.1
      */
     #define CHAINBINDER_NULLPTR nullptr
+
+    #define CHAINBINDER_NONNULL(...) [[gnu::nonnull(__VA_ARGS__)]]
 #endif // _MSC_VER
 
 /**

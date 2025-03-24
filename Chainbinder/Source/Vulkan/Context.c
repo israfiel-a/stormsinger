@@ -45,6 +45,7 @@ static VkInstance instance = CHAINBINDER_NULLPTR;
  * extensionCount and extensions parameters is not guaranteed to mean
  * anything.
  */
+CHAINBINDER_NONNULL(1, 2)
 static inline bool GetGLFWSupport(uint32_t *extensionCount,
                                   const char ***extensions)
 {

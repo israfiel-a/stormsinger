@@ -21,7 +21,7 @@ file(GLOB CHAINBINDER_SOURCES "Source/*.c" "Include/*.h" "Source/Vulkan/*.c"
 
 include(FetchContent)
 find_package(Vulkan REQUIRED)
-if(UNIX)
+if(UNIX AND STORMSINGER_USE_X11)
 	find_package(X11 REQUIRED)
 endif()
 
@@ -36,9 +36,12 @@ if(NOT glfw_POPULATED)
     set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build the GLFW documentation")
     set(GLFW_INSTALL OFF CACHE INTERNAL "Generate installation target")
 
-    if(STORMSINGER_USE_X11)
+    if(UNIX AND STORMSINGER_USE_X11)
         set(GLFW_BUILD_WAYLAND OFF CACHE INTERNAL "Build support for Wayland")
         set(GLFW_BUILD_X11 ON CACHE INTERNAL "Build support for X11")
+    else()    
+        set(GLFW_BUILD_WAYLAND ON CACHE INTERNAL "Build support for Wayland")
+        set(GLFW_BUILD_X11 OFF CACHE INTERNAL "Build support for X11")
     endif()
 endif()
 
@@ -58,7 +61,10 @@ target_include_directories(Chainbinder PUBLIC "${glfw_SOURCE_DIR}/include"
     "${Vulkan_INCLUDE_DIRS}" "./" "Include")
 target_link_libraries(Chainbinder PUBLIC glfw3 Vulkan::Vulkan)
 if(UNIX)
-	target_link_libraries(Chainbinder PUBLIC rt dl m ${X11_LIBRARIES})
+	target_link_libraries(Chainbinder PUBLIC rt dl m)
+    if(STORMSINGER_USE_X11)
+        target_link_libraries(${X11_LIBRARIES})
+    endif()
 endif()
 
 ############################################################################
