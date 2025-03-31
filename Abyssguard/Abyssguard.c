@@ -2,8 +2,8 @@
 
 int main(int argc, char **argv)
 {
-    Chainbinder_Initialize(argc, argv);
-    if (Chainbinder_GetError() != CHAINBINDER_NO_ERROR) return 1;
+    if (!Chainbinder_Initialize(argc, argv)) return 1;
+    // if (Chainbinder_GetError() != CHAINBINDER_NO_ERROR) return 1;
 
     Chainbinder_Run();
 

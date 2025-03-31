@@ -1,1 +1,0 @@
-- add new definition for Chainbinder log functions that removes them in release compilation mode

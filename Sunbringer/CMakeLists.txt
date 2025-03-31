@@ -1,4 +1,5 @@
 add_executable(Sunbringer "Sunbringer.c")
+target_compile_options(Sunbringer PRIVATE ${STORMSINGER_COMPILER_OPTIONS})
 
 # file(COPY "Textures" DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Sunbringer)
 

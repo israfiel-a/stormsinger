@@ -1,25 +1,99 @@
+/**
+ * @file Window.c
+ * @author Israfiel Argos (israfiel-a)
+ * @brief This file provides the implementation of the surface-level
+ * abstraction Chainbinder creates over GLFW.
+ *
+ * @since 0.1.0
+ * @updated 0.1.1
+ *
+ * @copyright (c) 2024-2025 - Israfil Argos
+ * This document is under the GNU Affero General Public License v3.0. It
+ * can be modified and distributed (commercially or otherwise) freely, and
+ * can be used privately and within patents. No liability or warranty is
+ * guaranteed. However, on use, the user must state license and copyright,
+ * any changes made, and disclose the source of the document. For more
+ * information see the @file LICENSE.md file included with this
+ * distribution of the source code, or https://www.gnu.org/licenses/agpl.
+ */
+
 #include <Reporting.h>
 #include <Window.h>
 
-#define GLFW_INCLUDE_NONE
+#define GLFW_INCLUDE_NONE // I prefer explicit includes.
 #include <GLFW/glfw3.h>
 
+/**
+ * @brief The handle of the currently created window object.
+ *
+ * @since 0.1.0
+ * @updated 0.1.1
+ */
 static GLFWwindow *window_handle = CHAINBINDER_NULLPTR;
+
+/**
+ * @brief The type of window currently created.
+ *
+ * @since 0.1.0
+ * @updated 0.1.1
+ */
 static chainbinder_window_type_t window_type = 0;
+
+/**
+ * @brief A boolean representing whether or not GLFW has been initialized.
+ *
+ * @since 0.1.0
+ * @updated 0.1.1
+ */
 static bool glfw_initialized = false;
 
+/**
+ * @brief The callback to be triggered whenever GLFW runs into an error.
+ *
+ * @since 0.1.0
+ * @updated 0.1.1
+ *
+ * @param code The error code reported.
+ * @param description A short, human-readable description of the error.
+ */
+CHAINBINDER_NONNULL(2)
 static void ErrorCallback(int code, const char *description)
 {
     Chainbinder_Log(CHAINBINDER_ERROR,
                     "Got GLFW error %d. Description: %s", code,
                     description);
+
+#if STORMSINGER_DISABLE_LOGS
+    // The above log will expand to nothing in this scenario, so we have to
+    // reference the parameters to prevent an MSVC tantrum.
+    (void)code;
+    (void)description;
+#endif
 }
 
+/**
+ * @brief Initialize the GLFW library.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ *
+ * @returns A boolean flag representing the success of the operation.
+ */
+CHAINBINDER_NOIGNORE
 static inline bool InitializeGLFW(void)
 {
-    if (glfw_initialized) return true;
+    if (glfw_initialized)
+    {
+        Chainbinder_Log(CHAINBINDER_WARNING,
+                        "Tried to initialize GLFW twice.");
+        return true;
+    }
 
     glfwSetErrorCallback(ErrorCallback);
+
+    // I HATE libdecor's decorations--and we don't need it, anyway. None of
+    // the created windows are decorated.
+    glfwInitHint(GLFW_WAYLAND_LIBDECOR, GLFW_WAYLAND_DISABLE_LIBDECOR);
     if (!glfwInit())
     {
         Chainbinder_Log(CHAINBINDER_ERROR, "Failed to initialize GLFW.");
@@ -30,18 +104,31 @@ static inline bool InitializeGLFW(void)
     return true;
 }
 
+/**
+ * @brief Set the window hints for the set window type, and get the desired
+ * dimensions for said window type.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ *
+ * @param resolution The information about the monitor we're currently on.
+ * @param width A place to store the desired width for the window.
+ * @param height A place to store the desired height for the window.
+ */
+CHAINBINDER_NONNULL(1, 2, 3)
 static inline void SetHints(const GLFWvidmode *resolution, int *width,
                             int *height)
 {
     glfwDefaultWindowHints();
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+    glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
     if (window_type == CHAINBINDER_SPLASHSCREEN)
     {
         *width = resolution->width >> 2;
         *height = resolution->height >> 2;
 
-        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     }
     else
@@ -103,6 +190,13 @@ bool Chainbinder_CreateWindow(const char *const title,
 
 void Chainbinder_DestroyWindow(void)
 {
+    if (window_handle == CHAINBINDER_NULLPTR)
+    {
+        Chainbinder_Log(CHAINBINDER_WARNING,
+                        "Tried to destroy window before its creation.");
+        return;
+    }
+
     glfwDestroyWindow(window_handle);
     Chainbinder_Log(CHAINBINDER_NOTICE, "Destroyed window of type %d.",
                     window_type);
@@ -113,6 +207,13 @@ void Chainbinder_DestroyWindow(void)
 
 void Chainbinder_RunWindow(void)
 {
+    if (window_handle == CHAINBINDER_NULLPTR)
+    {
+        Chainbinder_Log(CHAINBINDER_WARNING,
+                        "Tried to run window before its creation.");
+        return;
+    }
+
     glfwShowWindow(window_handle);
     while (!glfwWindowShouldClose(window_handle)) glfwPollEvents();
 }
