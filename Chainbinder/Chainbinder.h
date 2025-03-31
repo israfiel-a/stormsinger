@@ -49,6 +49,69 @@
      * @updated 0.1.1
      */
     #define CHAINBINDER_NULLPTR NULL
+
+    //! God damn you Microsoft. Why are you so annoying with supporting C?
+    //! Just port your C++ code, most features are just increased crossover
+    //! support. Please, I'm begging.
+
+    /**
+     * @brief The given arguments MUST be non-null.
+     *
+     * @since 0.1.1
+     * @updated 0.1.1
+     */
+    #define CHAINBINDER_NONNULL(...)
+
+    /**
+     * @brief This function NEVER returns null.
+     *
+     * @since 0.1.1
+     * @updated 0.1.1
+     */
+    #define CHAINBINDER_RETURNS_NONNULL(...)
+
+    /**
+     * @brief This function should be mushed down and inlined as much as
+     * physically possible.
+     *
+     * @since 0.1.1
+     * @updated 0.1.1
+     */
+    #define CHAINBINDER_FLATTEN
+
+    /**
+     * @brief The return value of this function should not be null.
+     *
+     * @since 0.1.1
+     * @updated 0.1.1
+     */
+    #define CHAINBINDER_NOIGNORE
+
+    /**
+     * @brief This function is a printf-style output method.
+     *
+     * @since 0.1.1
+     * @updated 0.1.1
+     */
+    #define CHAINBINDER_PRINTF(format_string, args)
+
+    /**
+     * @brief This function will be called often, and should be set
+     * aside for expressly that reason.
+     *
+     * @since 0.1.1
+     * @updated 0.1.1
+     */
+    #define CHAINBINDER_HOT
+
+    /**
+     * @brief This function should always be inlined, regardless of the
+     * compiler's opinion (sort of).
+     *
+     * @since 0.1.1
+     * @updated 0.1.1
+     */
+    #define CHAINBINDER_ALWAYSINLINE
 #else
     /**
      * @brief A directive that results in whatever structure it's applied
