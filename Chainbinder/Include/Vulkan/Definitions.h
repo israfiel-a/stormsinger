@@ -29,7 +29,7 @@
  * @since 0.1.1
  * @updated 0.1.1
  */
-#define CHECK_RESULT(expression, message, ...)                            \
+#define CHAINBINDER_CHECK_RESULT(expression, message, ...)                \
     {                                                                     \
         VkResult result = expression;                                     \
         if (result != VK_SUCCESS)                                         \

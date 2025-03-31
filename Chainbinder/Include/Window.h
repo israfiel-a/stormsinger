@@ -28,7 +28,7 @@
  * @since 0.1.1
  * @updated 0.1.1
  */
-CHAINBINDER_ENUM(chainbinder_window_type_t, CHAINBINDER_SPLASHSCREEN,
+CHAINBINDER_ENUM(window_type, CHAINBINDER_SPLASHSCREEN,
                  CHAINBINDER_GAMEWINDOW);
 
 /**

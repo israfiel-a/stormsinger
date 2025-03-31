@@ -20,6 +20,7 @@
 #define CHAINBINDER_VULKAN_CONTEXT_H
 
 #include <Chainbinder.h>
+#include <Vulkan/Definitions.h>
 
 /**
  * @brief Create the Vulkan instance.
@@ -30,11 +31,10 @@
  * @see Chainbinder_DestroyVulkanInstance(void) To destroy this created
  * instance.
  *
- * @returns A boolean value representing whether or not the instance was
- * created successfully.
+ * @returns A boolean value representing whether or not the instance
+ * was created successfully.
  */
-CHAINBINDER_NOIGNORE
-bool Chainbinder_CreateVulkanInstance(void);
+CHAINBINDER_NOIGNORE bool Chainbinder_CreateVulkanInstance(void);
 
 /**
  * @brief Destroy the Vulkan instance.
@@ -48,5 +48,7 @@ bool Chainbinder_CreateVulkanInstance(void);
  * has to be destroyed manually.
  */
 void Chainbinder_DestroyVulkanInstance(void);
+
+VkInstance Chainbinder_GetVulkanInstance();
 
 #endif // CHAINBINDER_VULKAN_CONTEXT_H

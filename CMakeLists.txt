@@ -45,6 +45,10 @@ option(STORMSINGER_USE_X11 "Use X11 over Wayland for windowing." OFF)
 option(STORMSINGER_USING_CLANGD 
     "The clangd language server will be used post-compilation." OFF)
 
+option(STORMSINGER_VALIDATION_LAYERS "Use Vulkan validation layers.")
+set(STORMSINGER_VALIDATION_LAYERS ${STORMSINGER_RELEASE} CACHE BOOL 
+	"Use Vulkan validation layers." FORCE)
+
 ############################################################################
 ## Output Directories
 ############################################################################
@@ -63,7 +67,8 @@ add_compile_definitions(STORMSINGER_VERSION="${PROJECT_VERSION}"
 	STORMSINGER_VERSION_MINOR=${PROJECT_VERSION_MINOR}
 	STORMSINGER_VERSION_PATCH=${PROJECT_VERSION_PATCH}
 	STORMSINGER_STRIP_LOG_METADATA=$<BOOL:${STORMSINGER_STRIP_LOG_METADATA}> 
-	STORMSINGER_DISABLE_LOGS=$<BOOL:${STORMSINGER_DISABLE_LOGS}>)
+	STORMSINGER_DISABLE_LOGS=$<BOOL:${STORMSINGER_DISABLE_LOGS}>
+    STORMSINGER_VALIDATION_LAYERS=$<BOOL:${STORMSINGER_VALIDATION_LAYERS}>)
 
 # Damn you Microsoft. Damn you.
 if(MSVC)

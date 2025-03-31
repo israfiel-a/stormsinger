@@ -19,10 +19,26 @@
 
 #include <Reporting.h>
 #include <Vulkan/Context.h>
-#include <Vulkan/Definitions.h>
+#include <Vulkan/Device.h>
+#include <string.h>
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+
+#ifdef STORMSINGER_VALIDATION_LAYERS
+
+static const chainbinder_size_t chainbinderValidationCount = 1;
+
+static CHAINBINDER_STRING_ARRAY(ValidationLayers,
+                                "VK_LAYER_KHRONOS_validation");
+
+#else
+
+static const chainbinder_size_t chainbinder_validation_count = 0;
+
+static CHAINBINDER_STRING_ARRAY(ValidationLayers, CHAINBINDER_NULLPTR);
+
+#endif
 
 /**
  * @brief The Vulkan instance currently created.
@@ -96,6 +112,51 @@ static void AssembleApplication(VkApplicationInfo *applicationInfo)
                     STORMSINGER_VERSION_PATCH);
 }
 
+#ifdef STORMSINGER_VALIDATION_LAYERS
+
+static bool FindValidationLayers()
+{
+    uint32_t layerCount = 0;
+    CHAINBINDER_CHECK_RESULT(
+        vkEnumerateInstanceLayerProperties(&layerCount,
+                                           CHAINBINDER_NULLPTR),
+        "Failed to enumerate instance extensions. Code: %d.");
+
+    VkLayerProperties *layerProperties;
+    CHAINBINDER_ALLOCATE(layerProperties,
+                         sizeof(VkLayerProperties) * layerCount);
+    // We simply assume that since the first poll didn't fail, this one
+    // won't either.
+    vkEnumerateInstanceLayerProperties(&layerCount, layerProperties);
+
+    chainbinder_size_t foundLayers = 0;
+    for (chainbinder_size_t i = 0; i < layerCount; i++)
+    {
+        if (foundLayers == chainbinderValidationCount) return true;
+
+        // Ugly, ugly nested loop, but works well. Unfortunately not every
+        // solution can be pretty...nor efficient. This is like O(n^3).
+        VkLayerProperties layer = layerProperties[i];
+        for (chainbinder_size_t j = 0; j < chainbinderValidationCount; j++)
+        {
+            const char *validationName = chainbinderValidationLayers[j];
+            if (strcmp(layer.layerName, validationName) == 0)
+            {
+                Chainbinder_Log(CHAINBINDER_VERBOSE, "Found layer %s.",
+                                validationName);
+                foundLayers++;
+                break;
+            }
+        }
+    }
+    // Trailing validation layer found!
+    if (foundLayers == chainbinderValidationCount) return true;
+
+    return false;
+}
+
+#endif
+
 /**
  * @brief Assemble the instance creation information structure. This also
  * decides what validation layers and extensions our instance is going to
@@ -134,10 +195,20 @@ static bool AssembleInstance(const VkApplicationInfo *applicationInfo,
                     "GLFW reported %d required extensions.",
                     glfwExtensionCount);
 
+#ifdef STORMSINGER_VALIDATION_LAYERS
+    if (!FindValidationLayers())
+    {
+        Chainbinder_Log(CHAINBINDER_ERROR,
+                        "Failed to find validation layers.");
+        return false;
+    }
+#endif
+
     instanceCreateInfo.enabledExtensionCount = glfwExtensionCount;
-    instanceCreateInfo.enabledLayerCount = 0;
     instanceCreateInfo.ppEnabledExtensionNames = glfwExtensionNames;
-    instanceCreateInfo.ppEnabledLayerNames = CHAINBINDER_NULLPTR;
+    instanceCreateInfo.enabledLayerCount = chainbinderValidationCount;
+    instanceCreateInfo.ppEnabledLayerNames = chainbinderValidationLayers;
+
     *instanceInfo = instanceCreateInfo;
     Chainbinder_Log(CHAINBINDER_VERBOSE,
                     "Assembled instance information.");
@@ -154,10 +225,12 @@ bool Chainbinder_CreateVulkanInstance(void)
     bool assembled = AssembleInstance(&applicationInfo, &createInfo);
     if (!assembled) return false;
 
-    CHECK_RESULT(
+    CHAINBINDER_CHECK_RESULT(
         vkCreateInstance(&createInfo, CHAINBINDER_NULLPTR, &instance),
         "Failed to create Vulkan instance. Code: %d.");
     Chainbinder_Log(CHAINBINDER_SUCCESS, "Created Vulkan instance.");
+
+    Chainbinder_FindPhysicalDevice();
 
     return true;
 }
@@ -167,3 +240,5 @@ void Chainbinder_DestroyVulkanInstance(void)
     vkDestroyInstance(instance, CHAINBINDER_NULLPTR);
     Chainbinder_Log(CHAINBINDER_NOTICE, "Destroyed Vulkan instance.");
 }
+
+VkInstance Chainbinder_GetVulkanInstance() { return instance; }

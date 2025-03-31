@@ -20,7 +20,9 @@
 #define CHAINBINDER_ROOT_H
 
 #include <inttypes.h>
+#include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 // Define cross-platform attributes for functions, variables, and
 // structures. I really, really wish that MS supported the full C23 spec,
@@ -205,7 +207,14 @@
     typedef enum CHAINBINDER_PACKED                                       \
     {                                                                     \
         __VA_ARGS__                                                       \
-    } name
+    } chainbinder_##name##_t
+
+#define CHAINBINDER_STRING_ARRAY(name, ...)                               \
+    const char *const chainbinder##name[] = {__VA_ARGS__}
+
+#define CHAINBINDER_ALLOCATE(item, size)                                  \
+    item = malloc(size);                                                  \
+    if (item == CHAINBINDER_NULLPTR) return false;
 
 /**
  * @brief The unsigned 8-bit integer type the engine uses. This works out
@@ -287,6 +296,8 @@ typedef int_fast32_t chainbinder_i32_t;
  */
 typedef int_fast64_t chainbinder_i64_t;
 
+typedef size_t chainbinder_size_t;
+
 /**
  * @brief An enumerator describing all the various error codes a function
  * can throw. If an engine function returns a false-evaluating value
@@ -298,8 +309,8 @@ typedef int_fast64_t chainbinder_i64_t;
  * @see Chainbinder_GetError(void) You can retrieve a recorded error code
  * via this function.
  */
-CHAINBINDER_ENUM(chainbinder_error_t, CHAINBINDER_FAILED_NONE,
-                 CHAINBINDER_FAILED_VULKAN, CHAINBINDER_FAILED_VMA);
+CHAINBINDER_ENUM(error, CHAINBINDER_FAILED_NONE, CHAINBINDER_FAILED_VULKAN,
+                 CHAINBINDER_FAILED_VMA);
 
 /**
  * @brief Initialize the Chainbinder engine, and all of its subprocesses.
