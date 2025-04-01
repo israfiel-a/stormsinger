@@ -97,7 +97,7 @@ static void AssembleApplication(VkApplicationInfo *applicationInfo)
                     STORMSINGER_VERSION_PATCH);
 }
 
-#ifdef STORMSINGER_VALIDATION_LAYERS
+#if !STORMSINGER_DISABLE_VALIDATION_LAYERS
 
 static bool FindValidationLayers(void)
 {
@@ -180,7 +180,7 @@ static bool AssembleInstance(const VkApplicationInfo *applicationInfo,
                     "GLFW reported %d required extensions.",
                     glfwExtensionCount);
 
-#ifdef STORMSINGER_VALIDATION_LAYERS
+#if !STORMSINGER_DISABLE_VALIDATION_LAYERS
     if (!FindValidationLayers())
     {
         Chainbinder_Log(CHAINBINDER_ERROR,
