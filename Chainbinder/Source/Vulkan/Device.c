@@ -87,9 +87,9 @@ static chainbinder_u32_t Chainbinder_FindGraphicsQueue(void)
         {
             Chainbinder_Log(CHAINBINDER_VERBOSE,
                             "Found graphics queue at index %zu.", i);
-            return i;
+            return (chainbinder_u32_t)i;
         }
-    return -1;
+    return (chainbinder_u32_t)-1;
 }
 
 bool Chainbinder_CreateLogicalDevice(void)
