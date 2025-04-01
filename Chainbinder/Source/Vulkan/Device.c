@@ -12,7 +12,7 @@ chainbinder_size_t GetSuitableIndex(const VkPhysicalDevice *devices,
 {
     // Really, REALLY unlikely that the user is running a machine with
     // SIZE_MAX graphics devices.
-    chainbinder_size_t bestIndex = -1;
+    chainbinder_size_t bestIndex = (chainbinder_size_t)-1;
     chainbinder_u8_t bestScore = 0;
     for (chainbinder_size_t i = 0; i < deviceCount; i++)
     {
