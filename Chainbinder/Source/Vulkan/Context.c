@@ -25,21 +25,6 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
-#ifdef STORMSINGER_VALIDATION_LAYERS
-
-static const chainbinder_size_t chainbinderValidationCount = 1;
-
-static CHAINBINDER_STRING_ARRAY(ValidationLayers,
-                                "VK_LAYER_KHRONOS_validation");
-
-#else
-
-static const chainbinder_size_t chainbinder_validation_count = 0;
-
-static CHAINBINDER_STRING_ARRAY(ValidationLayers, CHAINBINDER_NULLPTR);
-
-#endif
-
 /**
  * @brief The Vulkan instance currently created.
  */
@@ -114,7 +99,7 @@ static void AssembleApplication(VkApplicationInfo *applicationInfo)
 
 #ifdef STORMSINGER_VALIDATION_LAYERS
 
-static bool FindValidationLayers()
+static bool FindValidationLayers(void)
 {
     uint32_t layerCount = 0;
     CHAINBINDER_CHECK_RESULT(
@@ -230,7 +215,9 @@ bool Chainbinder_CreateVulkanInstance(void)
         "Failed to create Vulkan instance. Code: %d.");
     Chainbinder_Log(CHAINBINDER_SUCCESS, "Created Vulkan instance.");
 
+    // TODO: Check returns.
     Chainbinder_FindPhysicalDevice();
+    Chainbinder_CreateLogicalDevice();
 
     return true;
 }
@@ -241,4 +228,4 @@ void Chainbinder_DestroyVulkanInstance(void)
     Chainbinder_Log(CHAINBINDER_NOTICE, "Destroyed Vulkan instance.");
 }
 
-VkInstance Chainbinder_GetVulkanInstance() { return instance; }
+VkInstance Chainbinder_GetVulkanInstance(void) { return instance; }

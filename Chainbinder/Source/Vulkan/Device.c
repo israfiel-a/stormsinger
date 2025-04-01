@@ -4,6 +4,8 @@
 #include <Vulkan/Device.h>
 
 static VkPhysicalDevice physical = CHAINBINDER_NULLPTR;
+static VkDevice logical = CHAINBINDER_NULLPTR;
+static VkQueue graphicsQueue = CHAINBINDER_NULLPTR;
 
 chainbinder_size_t GetSuitableIndex(const VkPhysicalDevice *devices,
                                     uint32_t deviceCount)
@@ -34,7 +36,7 @@ chainbinder_size_t GetSuitableIndex(const VkPhysicalDevice *devices,
             bestIndex = i;
             bestScore = score;
             Chainbinder_Log(CHAINBINDER_VERBOSE,
-                            "Found suitable graphics device with name %s.",
+                            "Found suitable graphics device %s.",
                             properties.deviceName);
         }
     }
@@ -65,6 +67,67 @@ bool Chainbinder_FindPhysicalDevice(void)
         GetSuitableIndex(devices, deviceCount);
     if (deviceIndex == (chainbinder_size_t)-1) return false;
     physical = devices[deviceIndex];
+
+    return true;
+}
+
+static chainbinder_u32_t Chainbinder_FindGraphicsQueue(void)
+{
+    uint32_t queueFamilyCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(physical, &queueFamilyCount,
+                                             CHAINBINDER_NULLPTR);
+    VkQueueFamilyProperties *queueFamilies;
+    CHAINBINDER_ALLOCATE(queueFamilies, sizeof(VkQueueFamilyProperties) *
+                                            queueFamilyCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(physical, &queueFamilyCount,
+                                             queueFamilies);
+
+    for (chainbinder_size_t i = 0; i < queueFamilyCount; i++)
+        if (queueFamilies->queueFlags & VK_QUEUE_GRAPHICS_BIT)
+        {
+            Chainbinder_Log(CHAINBINDER_VERBOSE,
+                            "Found graphics queue at index %zu.", i);
+            return i;
+        }
+    return -1;
+}
+
+bool Chainbinder_CreateLogicalDevice(void)
+{
+    chainbinder_u32_t graphicsIndex = Chainbinder_FindGraphicsQueue();
+
+    VkDeviceQueueCreateInfo deviceQueueCreateInfo = {};
+    deviceQueueCreateInfo.sType =
+        VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    deviceQueueCreateInfo.pNext = CHAINBINDER_NULLPTR;
+    deviceQueueCreateInfo.queueFamilyIndex = graphicsIndex;
+    deviceQueueCreateInfo.queueCount = 1;
+
+    float priority = 1.0f;
+    deviceQueueCreateInfo.pQueuePriorities = &priority;
+
+    // We don't use any device features as of right now.
+    VkPhysicalDeviceFeatures deviceFeatures = {};
+
+    VkDeviceCreateInfo deviceCreateInfo = {};
+    deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    deviceCreateInfo.pNext = CHAINBINDER_NULLPTR;
+    deviceCreateInfo.pQueueCreateInfos = &deviceQueueCreateInfo;
+    deviceCreateInfo.queueCreateInfoCount = 1;
+    deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
+    deviceCreateInfo.ppEnabledExtensionNames = CHAINBINDER_NULLPTR;
+    deviceCreateInfo.enabledExtensionCount = 0;
+
+    // Only relevant for older implementations, but still a good idea to
+    // set them.
+    deviceCreateInfo.ppEnabledLayerNames = chainbinderValidationLayers;
+    deviceCreateInfo.enabledLayerCount = chainbinderValidationCount;
+
+    CHAINBINDER_CHECK_RESULT(
+        vkCreateDevice(physical, &deviceCreateInfo, CHAINBINDER_NULLPTR,
+                       &logical),
+        "Failed to create logical graphics device. Code: %d.");
+    vkGetDeviceQueue(logical, graphicsIndex, 0, &graphicsQueue);
 
     return true;
 }

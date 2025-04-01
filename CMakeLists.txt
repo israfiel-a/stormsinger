@@ -45,9 +45,9 @@ option(STORMSINGER_USE_X11 "Use X11 over Wayland for windowing." OFF)
 option(STORMSINGER_USING_CLANGD 
     "The clangd language server will be used post-compilation." OFF)
 
-option(STORMSINGER_VALIDATION_LAYERS "Use Vulkan validation layers.")
-set(STORMSINGER_VALIDATION_LAYERS ${STORMSINGER_RELEASE} CACHE BOOL 
-	"Use Vulkan validation layers." FORCE)
+option(STORMSINGER_DISABLE_VALIDATION_LAYERS "Don't use Vulkan validation layers.")
+set(STORMSINGER_DISABLE_VALIDATION_LAYERS ${STORMSINGER_RELEASE} CACHE BOOL 
+	"Don't use Vulkan validation layers." FORCE)
 
 ############################################################################
 ## Output Directories

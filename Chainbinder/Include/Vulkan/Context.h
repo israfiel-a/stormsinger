@@ -22,6 +22,23 @@
 #include <Chainbinder.h>
 #include <Vulkan/Definitions.h>
 
+#if !STORMSINGER_DISABLE_VALIDATION_LAYERS
+
+// u32 for a reason, otherwise msvc complains about converting implicitly
+// to u32
+static const chainbinder_u32_t chainbinderValidationCount = 1;
+
+static CHAINBINDER_STRING_ARRAY(ValidationLayers,
+                                "VK_LAYER_KHRONOS_validation");
+
+#else
+
+static const chainbinder_u32_t chainbinderValidationCount = 0;
+
+static CHAINBINDER_STRING_ARRAY(ValidationLayers, CHAINBINDER_NULLPTR);
+
+#endif
+
 /**
  * @brief Create the Vulkan instance.
  *
@@ -49,6 +66,6 @@ CHAINBINDER_NOIGNORE bool Chainbinder_CreateVulkanInstance(void);
  */
 void Chainbinder_DestroyVulkanInstance(void);
 
-VkInstance Chainbinder_GetVulkanInstance();
+VkInstance Chainbinder_GetVulkanInstance(void);
 
 #endif // CHAINBINDER_VULKAN_CONTEXT_H
