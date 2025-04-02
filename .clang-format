@@ -76,14 +76,12 @@ IncludeCategories:
     Priority: 1
 IncludeIsMainRegex: "(Test)?$"
 IndentCaseLabels: true 
-IndentPPDirectives: BeforeHash
+IndentPPDirectives: None
 IndentWidth: 4
 IndentWrappedFunctionNames: false
 JavaScriptQuotes: Leave
 JavaScriptWrapImports: true
 KeepEmptyLinesAtTheStartOfBlocks: true
-MacroBlockBegin: ""
-MacroBlockEnd: ""
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: All
 ObjCBlockIndentWidth: 2
@@ -111,3 +109,6 @@ SpacesInContainerLiterals: true
 SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
+AttributeMacros: [CHAINBINDER_NONNULL, CHAINBINDER_RETURNS_NONNULL, CHAINBINDER_FLATTEN, CHAINBINDER_NOIGNORE, CHAINBINDER_PRINTF, CHAINBINDER_HOT, CHAINBINDER_ALWAYSINLINE]
+MacroBlockBegin: "^if|else|elif|ifdef|elifdef$"
+MacroBlockEnd: "^endif$"

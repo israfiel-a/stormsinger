@@ -46,10 +46,9 @@ CHAINBINDER_ENUM(window_type, CHAINBINDER_SPLASHSCREEN,
  *
  * @returns A boolean flag representing the success of this operation.
  */
-CHAINBINDER_NONNULL(1)
-CHAINBINDER_NOIGNORE
-bool Chainbinder_CreateWindow(const char *const title,
-                              chainbinder_window_type_t type);
+CHAINBINDER_NONNULL(1) CHAINBINDER_NOIGNORE bool
+Chainbinder_CreateWindow(const char *const title,
+                         chainbinder_window_type_t type);
 
 /**
  * @brief Destroy the currently created window.
