@@ -48,7 +48,7 @@ CHAINBINDER_ENUM(log_type, CHAINBINDER_VERBOSE, CHAINBINDER_LOG,
  * @param line The line the log came from.
  * @param type The type of log this is.
  * @param format The format string for the log.
- * @param ... An arguments to be inserted into the format string,
+ * @param ... Any arguments to be inserted into the format string,
  * printf-style.
  */
 CHAINBINDER_NONNULL(4) CHAINBINDER_PRINTF(4, 5)
@@ -75,7 +75,7 @@ CHAINBINDER_HOT void(Chainbinder_Log)(const char *const filename,
  *
  * @param type The type of log this is.
  * @param format The format string for the log.
- * @param ... An arguments to be inserted into the format string,
+ * @param ... Any arguments to be inserted into the format string,
  * printf-style.
  */
 #define Chainbinder_Log(type, format, ...)                                \
@@ -92,7 +92,7 @@ CHAINBINDER_HOT void(Chainbinder_Log)(const char *const filename,
  *
  * @param type The type of log this is.
  * @param format The format string for the log.
- * @param ... An arguments to be inserted into the format string,
+ * @param ... Any arguments to be inserted into the format string,
  * printf-style.
  */
 #define Chainbinder_Log(type, format, ...)                                \

@@ -1,8 +1,14 @@
 #include <Chainbinder.h>
+#include <Reporting.h>
 
 static void RunSunbringer(void)
 {
-    if (!Chainbinder_Execute("./Sunbringer.exe")) return;
+    if (!Chainbinder_Execute("./Sunbringer.exe"))
+    {
+        Chainbinder_Log(CHAINBINDER_NOTICE,
+                        "Unable to properly run Sunbringer.");
+        return;
+    }
 }
 
 int main(int argc, char **argv)

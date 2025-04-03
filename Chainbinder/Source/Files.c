@@ -46,7 +46,20 @@ int Chainbinder_Execute(const char *fileName)
     if (!WIFEXITED(status)) return -1;
     return WEXITSTATUS(status);
 #else
-    // TODO: Windows.
-    return 0;
+    STARTUPINFO info = {sizeof(info)};
+    PROCESS_INFORMATION processInfo;
+    if (CreateProcess(fileName, CHAINBINDER_NULLPTR, CHAINBINDER_NULLPTR,
+                      CHAINBINDER_NULLPTR, TRUE, 0, CHAINBINDER_NULLPTR,
+                      CHAINBINDER_NULLPTR, &info, &processInfo))
+    {
+        WaitForSingleObject(processInfo.hProcess, INFINITE);
+        DWORD returnCode;
+        GetExitCodeProcess(processInfo.hProcess, &returnCode);
+
+        CloseHandle(processInfo.hProcess);
+        CloseHandle(processInfo.hThread);
+        return (int)returnCode;
+    }
+    else return -1;
 #endif
 }
