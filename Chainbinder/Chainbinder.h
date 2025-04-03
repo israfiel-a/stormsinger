@@ -389,4 +389,6 @@ bool Chainbinder_FileExecutable(const char *fileName);
 
 int Chainbinder_Execute(const char *fileName);
 
+bool Chainbinder_DeleteFile(const char *fileName);
+
 #endif // CHAINBINDER_ROOT_H

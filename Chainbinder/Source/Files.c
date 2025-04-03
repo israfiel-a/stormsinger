@@ -63,3 +63,8 @@ int Chainbinder_Execute(const char *fileName)
     else return -1;
 #endif
 }
+
+bool Chainbinder_DeleteFile(const char *fileName)
+{
+    return remove(fileName) != -1;
+}
