@@ -1,4 +1,5 @@
 #include <Chainbinder.h>
+#include <stdio.h>
 
 #ifdef __GNUC__
 
