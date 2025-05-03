@@ -115,7 +115,8 @@ CHAINBINDER_NOIGNORE static inline bool InitializeGLFW(void)
  * @param height A place to store the desired height for the window.
  */
 CHAINBINDER_NONNULL(1, 2, 3) static inline void
-SetHints(const GLFWvidmode *resolution, int *width, int *height)
+SetHints(const GLFWvidmode *resolution, const char *const title,
+         int *width, int *height)
 {
     glfwDefaultWindowHints();
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -145,6 +146,10 @@ SetHints(const GLFWvidmode *resolution, int *width, int *height)
     glfwWindowHint(GLFW_POSITION_Y, y);
     Chainbinder_Log(CHAINBINDER_VERBOSE, "Setup %dx%d window at (%d, %d).",
                     *width, *height, x, y);
+
+    glfwWindowHintString(GLFW_WAYLAND_APP_ID, title);
+    glfwWindowHintString(GLFW_X11_CLASS_NAME, title);
+    glfwWindowHintString(GLFW_X11_INSTANCE_NAME, title);
 }
 
 bool Chainbinder_CreateWindow(const char *const title,
@@ -170,7 +175,7 @@ bool Chainbinder_CreateWindow(const char *const title,
                     primary_resolution->width, primary_resolution->height);
 
     int width, height;
-    SetHints(primary_resolution, &width, &height);
+    SetHints(primary_resolution, title, &width, &height);
 
     window_handle = glfwCreateWindow(
         width, height, title, CHAINBINDER_NULLPTR, CHAINBINDER_NULLPTR);
