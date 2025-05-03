@@ -9,7 +9,7 @@ static void RunSunbringer(void)
                         "Unable to properly run Sunbringer.");
         return;
     }
-    Chainbinder_DeleteFile("./Sunbringer.exe");
+    (void)Chainbinder_DeleteFile("./Sunbringer.exe");
 }
 
 int main(int argc, char **argv)
