@@ -7,6 +7,8 @@
 ![loc_badge](https://github.com/israfiel-a/stormsinger/blob/badges/loc.svg)
 ![latest_stable_badge](https://img.shields.io/github/v/release/israfiel-a/stormsinger?label=Stable&color=blue)
 ![latest_unstable_badge](https://img.shields.io/github/v/release/israfiel-a/stormsinger?label=Experimental&include_preleases=true)
+![discord_badge](https://img.shields.io/discord/1368692259553415248?label=Discord)
+
 
 Stormsinger is a small and simple infinite driving game (inspired by [the Long Drive](https://store.steampowered.com/app/1017180/The_Long_Drive/)) built off of my own engine and done as a side project. It's written entirely in [C23](https://en.wikipedia.org/wiki/C23_(C_standard_revision)), and runs well on both [Microsoft Windows](https://www.microsoft.com/en-us/download/windows) and most graphical distributions of [Linux](https://kernel.org/). Stormsinger is named for the main angel in Vitiri theology, a being who's second only to Hekharam himself. It is split into three modules; [Abyssguard](./Abyssguard/README.md), the epithet used for the angelic guardian of the Realms, [Chainbinder](./Chainbinder/README.md), the title given to the angel of craftsmanship, and [Sunbringer](./Sunbringer/README.md), the name of the angel who holds the sun upon his charred back. 
 
