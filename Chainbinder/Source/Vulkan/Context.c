@@ -5,9 +5,9 @@
  * creation interface.
  *
  * @since 0.1.1
- * @updated 0.1.1
+ * @updated 0.1.2
  *
- * @copyright (c) 2024-2025 - Israfil Argos
+ * @copyright (c) 2024-2025 - the Stormsinger Project
  * This document is under the GNU Affero General Public License v3.0. It
  * can be modified and distributed (commercially or otherwise) freely, and
  * can be used privately and within patents. No liability or warranty is
@@ -46,11 +46,9 @@ static VkInstance instance = CHAINBINDER_NULLPTR;
  * extensionCount and extensions parameters is not guaranteed to mean
  * anything.
  */
-CHAINBINDER_NONNULL(1, 2)
-CHAINBINDER_FLATTEN
-CHAINBINDER_NOIGNORE
-static inline bool GetGLFWSupport(uint32_t *extensionCount,
-                                  const char ***extensions)
+CHAINBINDER_NONNULL(1, 2) CHAINBINDER_FLATTEN
+CHAINBINDER_NOIGNORE static inline bool
+GetGLFWSupport(uint32_t *extensionCount, const char ***extensions)
 {
     int supportFlag = glfwVulkanSupported();
     if (supportFlag != GLFW_TRUE) return false;
@@ -73,8 +71,8 @@ static inline bool GetGLFWSupport(uint32_t *extensionCount,
  * @param applicationInfo The storage place for the created application
  * info.
  */
-CHAINBINDER_NONNULL(1)
-static void AssembleApplication(VkApplicationInfo *applicationInfo)
+CHAINBINDER_NONNULL(1) static void
+AssembleApplication(VkApplicationInfo *applicationInfo)
 {
     VkApplicationInfo applicationCreateInfo = {0};
     applicationCreateInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -157,10 +155,9 @@ static bool FindValidationLayers(void)
  * @returns A boolean representing the success of polling GLFW for
  * extensions.
  */
-CHAINBINDER_NONNULL(1, 2)
-CHAINBINDER_NOIGNORE
-static bool AssembleInstance(const VkApplicationInfo *applicationInfo,
-                             VkInstanceCreateInfo *instanceInfo)
+CHAINBINDER_NONNULL(1, 2) CHAINBINDER_NOIGNORE static bool
+AssembleInstance(const VkApplicationInfo *applicationInfo,
+                 VkInstanceCreateInfo *instanceInfo)
 {
     VkInstanceCreateInfo instanceCreateInfo = {0};
     instanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;

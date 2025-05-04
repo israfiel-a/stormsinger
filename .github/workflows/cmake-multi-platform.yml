@@ -6,6 +6,7 @@ on:
     paths-ignore:
         - "**/README.md"
         - "**/LICENSE.md"
+        - "**/CONTRIBUTING.md"
         - ".gitignore"
         - "CMakePresets.json"
         - ".clang-format"

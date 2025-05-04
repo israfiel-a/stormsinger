@@ -7,7 +7,7 @@
 ############################################################################
 
 cmake_minimum_required (VERSION 3.30 FATAL_ERROR)
-project("Stormsinger" LANGUAGES C VERSION 0.1.1 DESCRIPTION 
+project("Stormsinger" LANGUAGES C VERSION 0.1.2 DESCRIPTION 
 	"Stormsinger is an infinite driving game set in the Leto universe")
 
 ############################################################################
