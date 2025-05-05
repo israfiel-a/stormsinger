@@ -1,15 +1,16 @@
 #include <Chainbinder.h>
 #include <Reporting.h>
+#include <Sunbringer.h>
 
 static void RunSunbringer(void)
 {
-    if (!Chainbinder_Execute("./Sunbringer.exe"))
+    if (Chainbinder_Execute("./" SUNBRINGER_FILENAME) == -1)
     {
         Chainbinder_Log(CHAINBINDER_NOTICE,
                         "Unable to properly run Sunbringer.");
         return;
     }
-    (void)Chainbinder_DeleteFile("./Sunbringer.exe");
+    (void)Chainbinder_DeleteFile("./" SUNBRINGER_FILENAME);
 }
 
 int main(int argc, char **argv)

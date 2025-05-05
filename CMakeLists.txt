@@ -60,6 +60,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Chainbinder)
 ## Commandline Flags
 ############################################################################
 
+include_directories("${CMAKE_SOURCE_DIR}/Sunbringer")
 link_directories("${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
 
 add_compile_definitions(STORMSINGER_VERSION="${PROJECT_VERSION}"

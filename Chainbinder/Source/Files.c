@@ -1,4 +1,5 @@
 #include <Chainbinder.h>
+#include <Reporting.h>
 #include <stdio.h>
 
 #ifdef __GNUC__
@@ -37,15 +38,48 @@ bool Chainbinder_FileExecutable(const char *fileName)
 
 int Chainbinder_Execute(const char *fileName)
 {
-    if (!Chainbinder_FileExecutable(fileName)) return -1;
+    if (!Chainbinder_FileExecutable(fileName))
+    {
+        Chainbinder_Log(
+            CHAINBINDER_WARNING,
+            "Tried to execute file without proper permissions.");
+        return -1;
+    }
 
 #ifdef __GNUC__
+
     pid_t pid = fork();
-    if (pid < 0) return -1;
+    if (pid == -1)
+    {
+        Chainbinder_Log(CHAINBINDER_ERROR, "Failed to fork process.");
+        return -1;
+    }
+    // This is executed within the new process.
+    if (pid == 0 && execve(fileName, (char **)&fileName, nullptr) == -1)
+    {
+        Chainbinder_Log(CHAINBINDER_ERROR, "Failed to execute file '%s'.",
+                        fileName);
+        return -1;
+    }
+
     int status = 0;
-    (void)waitpid(pid, &status, 0);
-    if (!WIFEXITED(status)) return -1;
+    pid_t waitStatus = waitpid(pid, &status, 0);
+    if (waitStatus == (pid_t)-1)
+    {
+        Chainbinder_Log(CHAINBINDER_WARNING,
+                        "Unable to wait for process '%s'.", fileName);
+        return -1;
+    }
+
+    if (!WIFEXITED(status))
+    {
+        Chainbinder_Log(CHAINBINDER_WARNING,
+                        "Process '%s' ended with an unexpected result.",
+                        fileName);
+        return -1;
+    }
     return WEXITSTATUS(status);
+
 #else
     STARTUPINFO info = {sizeof(info)};
     PROCESS_INFORMATION processInfo;
