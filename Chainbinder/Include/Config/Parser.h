@@ -5,6 +5,9 @@
 #include <stddef.h>
 
 #define CHAINBINDER_CONFIG_MAX_LINE_LENGTH 255
+#define CHAINBINDER_CONFIG_MAX_KEY_LENGTH 32
+#define CHAINBINDER_CONFIG_MAX_VALUE_LENGTH 128
+#define CHAINBINDER_CONFIG_MAX_SECTION_PAIRS 16
 
 typedef enum
 {
@@ -39,5 +42,7 @@ static const char *const configPaths[] = {
 
 bool Chainbinder_ParseConfig(chainbinder_config_type_t type,
                              chainbinder_config_t *config);
+
+void Chainbinder_FreeConfig(chainbinder_config_t *config);
 
 #endif // CHAINBINDER_CONFIG_PARSER_H
