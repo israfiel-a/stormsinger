@@ -20,6 +20,7 @@ set(ABYSSGUARD_SOURCES "Abyssguard.c")
 add_executable(Stormsinger ${ABYSSGUARD_SOURCES})
 add_dependencies(Stormsinger Chainbinder)
 target_link_libraries(Stormsinger Chainbinder)
+file(COPY "Chainbinder.cfg" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 
 ############################################################################
 ## Compilation Options

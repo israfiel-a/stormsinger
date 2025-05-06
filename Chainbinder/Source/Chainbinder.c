@@ -18,6 +18,7 @@
  */
 
 #include <Chainbinder.h>
+#include <Config/Parser.h>
 #include <Reporting.h>
 #include <Vulkan/Context.h>
 #include <Window.h>
@@ -42,6 +43,13 @@ bool Chainbinder_Initialize(int argc, char **argv)
 
     (void)argc;
     (void)argv;
+
+    chainbinder_config_t engineConfig;
+    if (!Chainbinder_ParseConfig(CHAINBINDER_ENGINE_CONFIG, &engineConfig))
+        return false;
+    Chainbinder_Log(CHAINBINDER_WARNING, "title:%s, image:%s",
+                    engineConfig.sections[0].splashscreen.title,
+                    engineConfig.sections[0].splashscreen.image);
 
     if (!Chainbinder_CreateWindow("TEST", CHAINBINDER_SPLASHSCREEN))
         return false;
