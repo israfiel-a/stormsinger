@@ -115,8 +115,7 @@ CHAINBINDER_NOIGNORE static inline bool InitializeGLFW(void)
  * @param height A place to store the desired height for the window.
  */
 CHAINBINDER_NONNULL(1, 2, 3) static inline void
-SetHints(const GLFWvidmode *resolution, const char *const title,
-         int *width, int *height)
+SetHints(const GLFWvidmode *resolution, int *width, int *height)
 {
     glfwDefaultWindowHints();
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -147,13 +146,12 @@ SetHints(const GLFWvidmode *resolution, const char *const title,
     Chainbinder_Log(CHAINBINDER_VERBOSE, "Setup %dx%d window at (%d, %d).",
                     *width, *height, x, y);
 
-    glfwWindowHintString(GLFW_WAYLAND_APP_ID, title);
-    glfwWindowHintString(GLFW_X11_CLASS_NAME, title);
-    glfwWindowHintString(GLFW_X11_INSTANCE_NAME, title);
+    glfwWindowHintString(GLFW_WAYLAND_APP_ID, "Stormsinger");
+    glfwWindowHintString(GLFW_X11_CLASS_NAME, "Stormsinger");
+    glfwWindowHintString(GLFW_X11_INSTANCE_NAME, "Stormsinger");
 }
 
-bool Chainbinder_CreateWindow(const char *const title,
-                              chainbinder_window_type_t type)
+bool Chainbinder_CreateWindow(chainbinder_window_type_t type)
 {
     if (window_handle != CHAINBINDER_NULLPTR)
     {
@@ -175,10 +173,11 @@ bool Chainbinder_CreateWindow(const char *const title,
                     primary_resolution->width, primary_resolution->height);
 
     int width, height;
-    SetHints(primary_resolution, title, &width, &height);
+    SetHints(primary_resolution, &width, &height);
 
-    window_handle = glfwCreateWindow(
-        width, height, title, CHAINBINDER_NULLPTR, CHAINBINDER_NULLPTR);
+    window_handle =
+        glfwCreateWindow(width, height, "Stormsinger", CHAINBINDER_NULLPTR,
+                         CHAINBINDER_NULLPTR);
     if (window_handle == CHAINBINDER_NULLPTR)
     {
         Chainbinder_Log(CHAINBINDER_ERROR,
@@ -186,7 +185,7 @@ bool Chainbinder_CreateWindow(const char *const title,
         return false;
     }
     Chainbinder_Log(CHAINBINDER_SUCCESS, "Created window with title '%s'.",
-                    title);
+                    "Stormsinger");
 
     return true;
 }

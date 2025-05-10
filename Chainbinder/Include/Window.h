@@ -36,19 +36,17 @@ CHAINBINDER_ENUM(window_type, CHAINBINDER_SPLASHSCREEN,
  * already created, this function will return immediately.
  *
  * @since 0.1.0
- * @updated 0.1.1
+ * @updated 0.1.2
  *
  * @see Chainbinder_DestroyWindow(void) to destroy the window created via
  * this function.
  *
- * @param title The desired title for the window.
  * @param type The type of window to create.
  *
  * @returns A boolean flag representing the success of this operation.
  */
-CHAINBINDER_NONNULL(1) CHAINBINDER_NOIGNORE bool
-Chainbinder_CreateWindow(const char *const title,
-                         chainbinder_window_type_t type);
+CHAINBINDER_NOIGNORE bool
+Chainbinder_CreateWindow(chainbinder_window_type_t type);
 
 /**
  * @brief Destroy the currently created window.

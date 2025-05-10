@@ -38,6 +38,12 @@ bool Chainbinder_FileExecutable(const char *fileName)
 
 int Chainbinder_Execute(const char *fileName)
 {
+    if (!Chainbinder_FileExists(fileName))
+    {
+        Chainbinder_Log(CHAINBINDER_WARNING,
+                        "Tried to execute ghost file '%s'.", fileName);
+        return -1;
+    }
     if (!Chainbinder_FileExecutable(fileName))
     {
         Chainbinder_Log(

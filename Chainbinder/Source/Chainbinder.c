@@ -43,9 +43,7 @@ bool Chainbinder_Initialize(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    if (!Chainbinder_CreateWindow("Stormsinger | Loading...",
-                                  CHAINBINDER_SPLASHSCREEN))
-        return false;
+    if (!Chainbinder_CreateWindow(CHAINBINDER_SPLASHSCREEN)) return false;
     // I would like to do this before creating the window, but GLFW
     // requires some extensions and in order to grab them, we need to have
     // the library initialized.
