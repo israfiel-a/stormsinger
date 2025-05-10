@@ -20,13 +20,13 @@ static const int chainbinderPermissions[] = {4, 2, 0, 6, 0, 0};
 
 #endif // __GNUC__
 
-bool Chainbinder_FileExists(const char *filename)
+bool Chainbinder_FileExists(const char *const filename)
 {
     return access(filename, chainbinderPermissions[CHAINBINDER_EXISTS]) ==
            0;
 }
 
-bool Chainbinder_FileExecutable(const char *fileName)
+bool Chainbinder_FileExecutable(const char *const fileName)
 {
 #ifdef __GNUC__
     return access(fileName, chainbinderPermissions[CHAINBINDER_EXECUTE]) ==
@@ -61,7 +61,8 @@ int Chainbinder_Execute(const char *fileName)
         return -1;
     }
     // This is executed within the new process.
-    if (pid == 0 && execve(fileName, (char **)&fileName, nullptr) == -1)
+    char *argv[2] = {(char *)fileName, nullptr};
+    if (pid == 0 && execve(fileName, argv, nullptr) == -1)
     {
         Chainbinder_Log(CHAINBINDER_ERROR, "Failed to execute file '%s'.",
                         fileName);

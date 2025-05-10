@@ -12,7 +12,8 @@ on:
         - ".clang-format"
   pull_request:
     branches: [ "*" ]
-
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ${{ matrix.os }}
