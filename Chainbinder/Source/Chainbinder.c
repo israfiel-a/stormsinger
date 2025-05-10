@@ -18,7 +18,6 @@
  */
 
 #include <Chainbinder.h>
-#include <Config/Parser.h>
 #include <Reporting.h>
 #include <Vulkan/Context.h>
 #include <Window.h>
@@ -44,16 +43,8 @@ bool Chainbinder_Initialize(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    chainbinder_config_t engineConfig;
-    if (!Chainbinder_ParseConfig(CHAINBINDER_ENGINE_CONFIG, &engineConfig))
-        return false;
-    Chainbinder_Log(CHAINBINDER_WARNING, "title:%s, image:%s",
-                    engineConfig.sections[0].splashscreen.title,
-                    engineConfig.sections[0].splashscreen.image);
-
-    if (!Chainbinder_CreateWindow(
-            engineConfig.sections[0].splashscreen.title,
-            CHAINBINDER_SPLASHSCREEN))
+    if (!Chainbinder_CreateWindow("Stormsinger | Loading...",
+                                  CHAINBINDER_SPLASHSCREEN))
         return false;
     // I would like to do this before creating the window, but GLFW
     // requires some extensions and in order to grab them, we need to have

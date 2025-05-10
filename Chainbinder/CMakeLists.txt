@@ -13,7 +13,7 @@
 set(CHAINBINDER_PUBLIC_INTERFACE "Chainbinder.h")
 # Globs aren't best practice, but to be honest I'm lazy.
 file(GLOB CHAINBINDER_SOURCES "Source/*.c" "Include/*.h" "Source/Vulkan/*.c" 
-	"Source/Config/*.c" "Include/Vulkan/*.h" "Include/Config/*.h")
+	"Include/Vulkan/*.h")
 
 ############################################################################
 ## Dependency Wrangling
