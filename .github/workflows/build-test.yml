@@ -7,10 +7,8 @@ on:
         - "CMakePresets.json"
         - ".**"
         - ".github/**"
-    branches-ignore:
-        - "badges"
   pull_request:
-    branches: [ "*" ]
+    branches: [ "*", "!badges" ]
   workflow_dispatch:
 permissions:
   statuses: write
