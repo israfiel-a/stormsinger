@@ -6,7 +6,6 @@ on:
         - "**/**.md"
         - "CMakePresets.json"
         - ".**"
-        - ".github/**"
   pull_request:
     branches: [ "*" ]
 jobs:
@@ -46,6 +45,6 @@ jobs:
         sudo apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libwayland-dev libxkbcommon-dev
     - name: Configure
       run: >
-        cmake -B build -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S ${{ github.workspace }}
+        cmake -B build -DCMAKE_C_COMPILER=${{ matrix.compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S ${{ github.workspace }}
     - name: Build
       run: cmake --build build --config ${{ matrix.build_type }} --parallel 9
