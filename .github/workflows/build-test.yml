@@ -6,7 +6,7 @@ on:
         - "**/**.md"
         - "CMakePresets.json"
         - ".**"
-        - "!.github"
+        - "!.github/**"
   pull_request:
     branches: [ "*" ]
 jobs:
