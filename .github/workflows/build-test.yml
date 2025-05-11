@@ -5,6 +5,8 @@ on:
     paths-ignore:
         - "**/**.md"
         - "CMakePresets.json"
+        - ".**"
+        - "!/**/"
   pull_request:
     branches: [ "*" ]
 jobs:
@@ -18,18 +20,18 @@ jobs:
         compiler: [gcc, clang, cl]
         include:
           - os: windows-latest
-            c_compiler: cl
+            compiler: cl
           - os: ubuntu-latest
-            c_compiler: gcc
+            compiler: gcc
           - os: ubuntu-latest
-            c_compiler: clang
+            compiler: clang
         exclude:
           - os: windows-latest
-            c_compiler: gcc
+            compiler: gcc
           - os: windows-latest
-            c_compiler: clang
+            compiler: clang
           - os: ubuntu-latest
-            c_compiler: cl
+            compiler: cl
     steps:
     - uses: actions/checkout@v4
     - name: Prepare Vulkan
