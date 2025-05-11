@@ -1,15 +1,14 @@
 name: Build Test
-
 on:
   push:
     branches: [ "*" ]
     paths-ignore:
-        - "**/README.md"
-        - "**/LICENSE.md"
-        - "**/CONTRIBUTING.md"
-        - ".gitignore"
+        - "**/**.md"
         - "CMakePresets.json"
-        - ".clang-format"
+        - ".**"
+        - ".github/**"
+    branches-ignore:
+        - "badges"
   pull_request:
     branches: [ "*" ]
   workflow_dispatch:
