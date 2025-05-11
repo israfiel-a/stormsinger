@@ -47,7 +47,6 @@ jobs:
       run: |
         pwd
     - name: Configure
-      run: >
-        cmake -B build -DCMAKE_C_COMPILER=${{ matrix.compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S ${{ github.workspace }}
+      run: cmake -B ${{ github.workspace }}/build -DCMAKE_C_COMPILER=${{ matrix.compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S ${{ github.workspace }}
     - name: Build
-      run: cmake --build build --config ${{ matrix.build_type }} --parallel 9
+      run: cmake --build ${{ github.workspace }}/build --config ${{ matrix.build_type }} --parallel 9
