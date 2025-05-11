@@ -1,4 +1,5 @@
 #include <stdalign.h>
+#include <stdarg.h>
 
 int main(int argc, char **argv)
 {
