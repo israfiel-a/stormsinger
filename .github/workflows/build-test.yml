@@ -38,6 +38,7 @@ jobs:
       with:
        vulkan-query-version: latest
        vulkan-components: Vulkan-Headers, Vulkan-Loader SPIRV-Tools
+       vulkan-use-cache: true
     - name: Install Dependencies
       if: matrix.os == 'ubuntu-latest'
       run: |
