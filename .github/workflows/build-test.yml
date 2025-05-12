@@ -5,8 +5,7 @@ on:
     paths-ignore:
         - "**/**.md"
         - "CMakePresets.json"
-        - ".**"
-        - ".github/**"
+        - ".*"
   pull_request:
     branches: [ "*" ]
 jobs:
@@ -20,18 +19,18 @@ jobs:
         compiler: [gcc, clang, cl]
         include:
           - os: windows-latest
-            c_compiler: cl
+            compiler: cl
           - os: ubuntu-latest
-            c_compiler: gcc
+            compiler: gcc
           - os: ubuntu-latest
-            c_compiler: clang
+            compiler: clang
         exclude:
           - os: windows-latest
-            c_compiler: gcc
+            compiler: gcc
           - os: windows-latest
-            c_compiler: clang
+            compiler: clang
           - os: ubuntu-latest
-            c_compiler: cl
+            compiler: cl
     steps:
     - uses: actions/checkout@v4
     - name: Prepare Vulkan
@@ -44,8 +43,10 @@ jobs:
       run: |
         sudo apt update
         sudo apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libwayland-dev libxkbcommon-dev
+    - name: PWD
+      run: |
+        pwd
     - name: Configure
-      run: >
-        cmake -B build -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S ${{ github.workspace }}
+      run: cmake -B ${{ github.workspace }}/buildDirectory -DCMAKE_C_COMPILER=${{ matrix.compiler }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -S ${{ github.workspace }}
     - name: Build
-      run: cmake --build build --config ${{ matrix.build_type }} --parallel 9
+      run: cmake --build ${{ github.workspace }}/buildDirectory --config ${{ matrix.build_type }} --parallel 9
