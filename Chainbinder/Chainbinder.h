@@ -22,7 +22,7 @@
 #include <inttypes.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdlib.h>
+#include <stdlib.h> // IWYU pragma: keep
 
 // Define cross-platform attributes for functions, variables, and
 // structures. I really, really wish that MS supported the full C23 spec,
@@ -387,7 +387,7 @@ Chainbinder_FileExists(const char *fileName);
 
 bool Chainbinder_FileExecutable(const char *fileName);
 
-int Chainbinder_Execute(const char *fileName);
+int Chainbinder_Execute(const char *fileName, char **argv);
 
 bool Chainbinder_DeleteFile(const char *fileName);
 

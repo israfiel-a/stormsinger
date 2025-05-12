@@ -4,7 +4,7 @@
 
 static void RunSunbringer(void)
 {
-    if (Chainbinder_Execute("./" SUNBRINGER_FILENAME) == -1)
+    if (Chainbinder_Execute("./" SUNBRINGER_FILENAME, nullptr) == -1)
     {
         Chainbinder_Log(CHAINBINDER_NOTICE,
                         "Unable to properly run Sunbringer.");

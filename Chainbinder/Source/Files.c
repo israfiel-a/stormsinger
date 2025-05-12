@@ -36,7 +36,7 @@ bool Chainbinder_FileExecutable(const char *const fileName)
 #endif
 }
 
-int Chainbinder_Execute(const char *fileName)
+int Chainbinder_Execute(const char *fileName, char **argv)
 {
     if (!Chainbinder_FileExists(fileName))
     {
@@ -60,9 +60,11 @@ int Chainbinder_Execute(const char *fileName)
         Chainbinder_Log(CHAINBINDER_ERROR, "Failed to fork process.");
         return -1;
     }
+
+    char *trueArgv[] = {(char *)fileName,
+                        (argv != nullptr ? *argv : nullptr)};
     // This is executed within the new process.
-    char *argv[2] = {(char *)fileName, nullptr};
-    if (pid == 0 && execve(fileName, argv, nullptr) == -1)
+    if (pid == 0 && execve(fileName, trueArgv, nullptr) == -1)
     {
         Chainbinder_Log(CHAINBINDER_ERROR, "Failed to execute file '%s'.",
                         fileName);
