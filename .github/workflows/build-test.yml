@@ -34,17 +34,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Prepare Vulkan
-      uses: humbletim/setup-vulkan-sdk@v1.2.1
+      uses: jakoch/install-vulkan-sdk-action@v1
       with:
-       vulkan-query-version: latest
-       vulkan-components: Vulkan-Headers, Vulkan-Loader
-       vulkan-use-cache: true
-    - name: Build Shaderc
-      run: |
-        git clone https://github.com/google/shaderc && cd shaderc
-        python utils/git-sync-deps
-        cmake -B build -DCMAKE_BUILD_TYPE=Release -DSHADERC_SKIP_TESTS:BOOL=true -DSHADERC_SKIP_EXAMPLES:BOOL=true
-        cmake --build build --target install --config Release --parallel 9
+          optional_components: com.lunarg.vulkan.vma
+          install_runtime: true
+          cache: true
+          stripdown: true
     - name: Install Dependencies
       if: matrix.os == 'ubuntu-latest'
       run: |
