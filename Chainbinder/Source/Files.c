@@ -90,6 +90,9 @@ int Chainbinder_Execute(const char *fileName, char **argv)
     return WEXITSTATUS(status);
 
 #else
+    // TODO: This needs to be implemented.
+    (void)argv;
+
     STARTUPINFO info = {sizeof(info)};
     PROCESS_INFORMATION processInfo;
     if (CreateProcess(fileName, CHAINBINDER_NULLPTR, CHAINBINDER_NULLPTR,
