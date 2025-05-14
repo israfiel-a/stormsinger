@@ -67,6 +67,7 @@ if(UNIX)
     endif()
 endif()
 
+set(STEELBLADE_USING_CLANGD ${STORMSINGER_USING_CLANGD} CACHE INTERNAL "The clangd language server will be used post-compilation.")
 add_subdirectory("Steelblade") # String wrapper
 
 ############################################################################
