@@ -61,10 +61,11 @@ int Chainbinder_Execute(const char *fileName, char **argv)
         return -1;
     }
 
-    char *trueArgv[] = {(char *)fileName,
-                        (argv != nullptr ? *argv : nullptr)};
+    char *trueArgv[] = {
+        (char *)fileName,
+        (argv != CHAINBINDER_NULLPTR ? *argv : CHAINBINDER_NULLPTR)};
     // This is executed within the new process.
-    if (pid == 0 && execve(fileName, trueArgv, nullptr) == -1)
+    if (pid == 0 && execve(fileName, trueArgv, CHAINBINDER_NULLPTR) == -1)
     {
         Chainbinder_Log(CHAINBINDER_ERROR, "Failed to execute file '%s'.",
                         fileName);
