@@ -5,7 +5,7 @@ int main(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    char *args[] = {nullptr};
+    char *args[] = {CHAINBINDER_NULLPTR};
     int shaderCompilation = Chainbinder_Execute(GLSL, args);
     if (shaderCompilation == -1) return -1;
 
