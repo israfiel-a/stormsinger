@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.0.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.30.0 FATAL_ERROR)
 project("Steelblade" LANGUAGES C VERSION 0.0.1.0 
     DESCRIPTION "A pure-C string wrapper for use in Chainbinder.")
 
