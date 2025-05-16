@@ -1,5 +1,0 @@
-cmake -B build -DCMAKE_BUILD_TYPE=$1 -DSTORMSINGER_USING_CLANGD:BOOL=true
-cd build
-make
-cd Stormsinger
-./Stormsinger

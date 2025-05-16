@@ -41,10 +41,6 @@ set(STORMSINGER_DISABLE_LOGS ${STORMSINGER_RELEASE} CACHE BOOL
 
 option(STORMSINGER_USE_X11 "Use X11 over Wayland for windowing." OFF)
 
-# This disables flags that'll give clangd trouble, specifically -fanalyzer.
-option(STORMSINGER_USING_CLANGD 
-    "The clangd language server will be used post-compilation." OFF)
-
 option(STORMSINGER_DISABLE_VALIDATION_LAYERS "Don't use Vulkan validation layers.")
 set(STORMSINGER_DISABLE_VALIDATION_LAYERS ${STORMSINGER_RELEASE} CACHE BOOL 
 	"Don't use Vulkan validation layers." FORCE)
@@ -105,13 +101,8 @@ else()
         # ASAN_OPTIONS ENV variable.
 		list(APPEND STORMSINGER_COMPILER_OPTIONS -Og -g3 -ggdb
             -fsanitize=address -fsanitize=pointer-compare -fsanitize=leak
-            -fsanitize=pointer-subtract -fsanitize=undefined)
+            -fsanitize=pointer-subtract -fsanitize=undefined -fanalyzer)
         add_link_options(-fsanitize=address -fsanitize=undefined)
-
-        if(CMAKE_C_COMPILER_ID STREQUAL "GNU" AND NOT 
-            STORMSINGER_USING_CLANGD)
-            list(APPEND STORMSINGER_COMPILER_OPTIONS -fanalyzer)
-        endif()
 	else()
 		list(APPEND STORMSINGER_COMPILER_OPTIONS -Ofast -flto)
         add_link_options(-Ofast -flto)
