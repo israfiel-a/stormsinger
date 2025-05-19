@@ -16,7 +16,7 @@ add_library(Steelblade STATIC ${STEELBLADE_SOURCES})
 
 # Damn you Microsoft. Damn you.
 if(MSVC)
-    target_compile_options(Steelblade PRIVATE /std:clatest /Wall /WX /external:W0 /external:anglebrackets /wd4711 /wd4710 /wd4061 /wd5045)
+    target_compile_options(Steelblade PRIVATE /std:clatest /Wall /WX /external:W0 /external:anglebrackets /wd4711 /wd4710 /wd4061 /wd5045 /wd4996)
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         target_compile_options(Steelblade PRIVATE /Od /Zi /Zo /EHa /EHr /fsanitize=address /fsanitize=fuzzer /fsanitize-coverage=edge /fsanitize-coverage=inline-8bit-counters /fsanitize-coverage=trace-cmp /fsanitize-coverage=trace-div)
     else()
