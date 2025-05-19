@@ -101,8 +101,12 @@ else()
         # ASAN_OPTIONS ENV variable.
 		list(APPEND STORMSINGER_COMPILER_OPTIONS -Og -g3 -ggdb
             -fsanitize=address -fsanitize=pointer-compare -fsanitize=leak
-            -fsanitize=pointer-subtract -fsanitize=undefined -fanalyzer)
+            -fsanitize=pointer-subtract -fsanitize=undefined)
         add_link_options(-fsanitize=address -fsanitize=undefined)
+
+        if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+            list(APPEND STORMSINGER_COMPILER_OPTIONS -fanalyzer)
+        endif()
 	else()
 		list(APPEND STORMSINGER_COMPILER_OPTIONS -Ofast -flto)
         add_link_options(-Ofast -flto)
