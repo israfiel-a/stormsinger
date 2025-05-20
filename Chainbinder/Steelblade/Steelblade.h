@@ -6,17 +6,26 @@
 
 typedef struct
 {
-    char *_;
+    char *value;
     size_t length;
 } steelblade_string_t;
 
-void SteelbladeSetArenaSize(size_t size);
+typedef enum
+{
+    STEELBLADE_OKAY,
+    STEELBLADE_FAILED_ALLOCATION,
+    STEELBLADE_BUFFER_OVERFLOW
+} steelblade_error_t;
 
-steelblade_string_t SteelbladeCreate(const char *const string);
+steelblade_error_t SteelbladeBegin(size_t size);
+void SteelbladeCleanup(void);
 
-void SteelbladeDestroy(steelblade_string_t *string);
+steelblade_string_t SteelbladeCreate(const char *const string,
+                                     steelblade_error_t *error);
 
-steelblade_string_t
-SteelbladeDuplicate(const steelblade_string_t *const string);
+// void SteelbladeDestroy(steelblade_string_t *string);
+
+// steelblade_string_t
+// SteelbladeDuplicate(const steelblade_string_t *const string);
 
 #endif // STEELBLADE_H

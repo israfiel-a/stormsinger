@@ -19,8 +19,10 @@
 
 #include <Chainbinder.h>
 #include <Reporting.h>
+#include <Steelblade.h>
 #include <Vulkan/Context.h>
 #include <Window.h>
+#include <stdio.h>
 
 /**
  * @brief A flag representing whether or not the engine is initialized and
@@ -42,6 +44,13 @@ bool Chainbinder_Initialize(int argc, char **argv)
 
     (void)argc;
     (void)argv;
+
+    SteelbladeBegin(256);
+    steelblade_error_t error;
+    steelblade_string_t string = SteelbladeCreate("Hello, world!", &error);
+    if (error != STEELBLADE_OKAY) printf("%d\n", error);
+    else printf("%s\n", string.value);
+    SteelbladeCleanup();
 
     if (!Chainbinder_CreateWindow(CHAINBINDER_SPLASHSCREEN)) return false;
     // I would like to do this before creating the window, but GLFW
