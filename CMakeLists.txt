@@ -79,7 +79,7 @@ endif()
 set(STORMSINGER_COMPILER_OPTIONS)
 if(MSVC)
 	list(APPEND STORMSINGER_COMPILER_OPTIONS /Wall /WX /external:W0 
-		/external:anglebrackets /wd4711 /wd4710 /wd4061 /wd5045)
+		/external:anglebrackets /wd4711 /wd4710 /wd4061 /wd5045 /wd4996)
 
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 		list(APPEND STORMSINGER_COMPILER_OPTIONS /Od /Zi /Zo /EHa /EHr 
