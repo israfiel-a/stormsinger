@@ -1,33 +1,30 @@
 #include "Steelblade.h"
+#include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-char *stringArena = 0;
-char *stringArenaOffset = 0;
-size_t stringArenaSize = 0;
-size_t stringArenaLeft = 0;
-
+static steelblade_arena_t arena = {0};
 steelblade_allocation_mode_t allocationMode = STEELBLADE_EXPLICIT;
 
 static char *GetArenaBlock(size_t size, steelblade_error_t *error)
 {
     size_t trueSize = size + 1;
-    if (trueSize > stringArenaLeft &&
-        allocationMode == STEELBLADE_EXPLICIT)
+    if (trueSize > arena.end && allocationMode == STEELBLADE_EXPLICIT)
     {
         *error = STEELBLADE_BUFFER_OVERFLOW;
         return 0;
     }
-    else if (trueSize > stringArenaLeft)
+    else if (trueSize > arena.end)
     {
-        stringArena = realloc(stringArena, stringArenaSize += trueSize);
-        stringArenaLeft += trueSize;
-        stringArenaOffset =
-            stringArena + (stringArenaSize - stringArenaLeft);
+        arena.buffer =
+            realloc(arena.buffer, arena.size += (trueSize - arena.end));
+        arena.end += trueSize - arena.end;
+        arena.offset = arena.buffer + arena.size - arena.end;
     }
-    char *block = stringArenaOffset;
-    stringArenaOffset += trueSize;
-    stringArenaLeft -= trueSize;
+    char *block = arena.offset;
+    arena.offset += trueSize;
+    arena.end -= trueSize;
 
     *error = STEELBLADE_OKAY;
     return block;
@@ -51,29 +48,26 @@ static char *CopyIntoArena(const char *const string, size_t length,
     return stringBlock;
 }
 
-static void FreeArena(void)
-{
-    if (stringArena == 0) return;
-
-    free(stringArena);
-    stringArena = 0;
-    stringArenaOffset = 0;
-    stringArenaSize = 0;
-    stringArenaLeft = 0;
-}
-
 steelblade_error_t SteelbladeBegin(size_t size)
 {
-    FreeArena();
-    stringArenaSize = size;
-    stringArenaLeft = size;
-    stringArena = calloc(stringArenaSize, 1);
-    stringArenaOffset = stringArena;
-    if (stringArena == 0) return STEELBLADE_FAILED_ALLOCATION;
+    steelblade_error_t error;
+    Steelblade_FreeArena(&error);
+    (void)error;
+
+    arena.size = size;
+    arena.end = size;
+    arena.buffer = calloc(arena.size, 1);
+    if (arena.buffer == 0) return STEELBLADE_FAILED_ALLOCATION;
+    arena.offset = arena.buffer;
     return STEELBLADE_OKAY;
 }
 
-void SteelbladeCleanup(void) { FreeArena(); }
+void SteelbladeCleanup(void)
+{
+    steelblade_error_t error;
+    Steelblade_FreeArena(&error);
+    (void)error;
+}
 
 void SteelbladeSetAllocationMode(steelblade_allocation_mode_t mode)
 {
@@ -88,16 +82,88 @@ steelblade_string_t SteelbladeCreate(const char *const string,
         .value = CopyIntoArena(string, length, error), .length = length};
 }
 
-// void SteelbladeDestroy(steelblade_string_t *string)
-// {
-//     free(string->_);
-//     string->_ = 0;
-//     string->length = 0;
-// }
+void Steelblade_StretchArena(size_t amount, steelblade_error_t *error)
+{
+    if (arena.buffer == 0)
+    {
+        *error = STEELBLADE_NO_ARENA;
+        return;
+    }
 
-// steelblade_string_t
-// SteelbladeDuplicate(const steelblade_string_t *const string)
-// {
-//     return (steelblade_string_t){._ = strdup(string->_),
-//                                  .length = string->length};
-// }
+    arena.buffer = realloc(arena.buffer, arena.size += amount);
+    if (arena.buffer == 0)
+    {
+        *error = STEELBLADE_FAILED_ALLOCATION;
+        return;
+    }
+    arena.end += amount;
+    *error = STEELBLADE_OKAY;
+}
+
+void Steelblade_ShrinkArena(size_t amount, steelblade_error_t *error)
+{
+    if (arena.buffer == 0)
+    {
+        *error = STEELBLADE_NO_ARENA;
+        return;
+    }
+
+    if (amount > arena.end)
+    {
+        *error = STEELBLADE_DATA_INTERSECTION;
+        return;
+    }
+    arena.end -= amount;
+    arena.buffer = realloc(arena.buffer, arena.size -= amount);
+    if (arena.buffer == 0)
+    {
+        *error = STEELBLADE_FAILED_ALLOCATION;
+        return;
+    }
+    *error = STEELBLADE_OKAY;
+}
+
+void Steelblade_TrimArena(steelblade_error_t *error)
+{
+    if (arena.buffer == 0)
+    {
+        *error = STEELBLADE_NO_ARENA;
+        return;
+    }
+
+    const size_t trimmedSize = arena.size -= arena.end;
+    arena.buffer = realloc(arena.buffer, trimmedSize);
+    if (arena.buffer == 0)
+    {
+        *error = STEELBLADE_FAILED_ALLOCATION;
+        return;
+    }
+    arena.end = 0;
+    *error = STEELBLADE_OKAY;
+}
+
+void Steelblade_ResetArena(steelblade_error_t *error)
+{
+    if (arena.buffer == 0)
+    {
+        *error = STEELBLADE_NO_ARENA;
+        return;
+    }
+
+    arena.offset = arena.buffer;
+    arena.end = arena.size;
+    *error = STEELBLADE_OKAY;
+}
+
+void Steelblade_FreeArena(steelblade_error_t *error)
+{
+    if (arena.buffer == 0)
+    {
+        *error = STEELBLADE_NO_ARENA;
+        return;
+    }
+
+    free(arena.buffer);
+    arena = (steelblade_arena_t){0};
+    *error = STEELBLADE_OKAY;
+}
