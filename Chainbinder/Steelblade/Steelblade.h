@@ -17,8 +17,15 @@ typedef enum
     STEELBLADE_BUFFER_OVERFLOW
 } steelblade_error_t;
 
+typedef enum
+{
+    STEELBLADE_EXPLICIT,
+    STEELBLADE_IMPLICIT
+} steelblade_allocation_mode_t;
+
 steelblade_error_t SteelbladeBegin(size_t size);
 void SteelbladeCleanup(void);
+void SteelbladeSetAllocationMode(steelblade_allocation_mode_t mode);
 
 steelblade_string_t SteelbladeCreate(const char *const string,
                                      steelblade_error_t *error);

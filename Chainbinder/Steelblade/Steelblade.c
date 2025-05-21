@@ -7,15 +7,27 @@ char *stringArenaOffset = 0;
 size_t stringArenaSize = 0;
 size_t stringArenaLeft = 0;
 
+steelblade_allocation_mode_t allocationMode = STEELBLADE_EXPLICIT;
+
 static char *GetArenaBlock(size_t size, steelblade_error_t *error)
 {
-    if (size > stringArenaLeft)
+    size_t trueSize = size + 1;
+    if (trueSize > stringArenaLeft &&
+        allocationMode == STEELBLADE_EXPLICIT)
     {
         *error = STEELBLADE_BUFFER_OVERFLOW;
         return 0;
     }
+    else if (trueSize > stringArenaLeft)
+    {
+        stringArena = realloc(stringArena, stringArenaSize += trueSize);
+        stringArenaLeft += trueSize;
+        stringArenaOffset =
+            stringArena + (stringArenaSize - stringArenaLeft);
+    }
     char *block = stringArenaOffset;
-    stringArenaOffset += size;
+    stringArenaOffset += trueSize;
+    stringArenaLeft -= trueSize;
 
     *error = STEELBLADE_OKAY;
     return block;
@@ -24,7 +36,7 @@ static char *GetArenaBlock(size_t size, steelblade_error_t *error)
 static char *CopyIntoArena(const char *const string, size_t length,
                            steelblade_error_t *error)
 {
-    char *stringBlock = GetArenaBlock(length + 1, error);
+    char *stringBlock = GetArenaBlock(length, error);
     if (stringBlock == 0) return 0;
     char *stringBlockPointer = stringBlock;
 
@@ -62,6 +74,11 @@ steelblade_error_t SteelbladeBegin(size_t size)
 }
 
 void SteelbladeCleanup(void) { FreeArena(); }
+
+void SteelbladeSetAllocationMode(steelblade_allocation_mode_t mode)
+{
+    allocationMode = mode;
+}
 
 steelblade_string_t SteelbladeCreate(const char *const string,
                                      steelblade_error_t *error)

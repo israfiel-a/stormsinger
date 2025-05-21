@@ -46,8 +46,15 @@ bool Chainbinder_Initialize(int argc, char **argv)
     (void)argv;
 
     SteelbladeBegin(256);
+    SteelbladeSetAllocationMode(STEELBLADE_IMPLICIT);
     steelblade_error_t error;
-    steelblade_string_t string = SteelbladeCreate("Hello, world!", &error);
+    steelblade_string_t string = SteelbladeCreate(
+        "y4iu2bwncrbut8diyc2c1gb6phmg21yruop08h1wm2vi4mev9pr463fzm0cx5sdl8"
+        "hpuwxxusft438k1fkfj713hgeyknir1yb5lzjyez01hyh7k2wle645z9vndj2wzbd"
+        "7ptj4t4vf5b70phebkrv1ubhhwch6piyjd64vgxhm5pfbion388b86bxqc01d1h0e"
+        "kldkvu49oloyu73ukqooxiye1otlq2a1ml0h2y9o2pxifk5stdgrb3znujhcohrew"
+        "ouhiohfewihfwohfewiofhewiofhe0",
+        &error);
     if (error != STEELBLADE_OKAY) printf("%d\n", error);
     else printf("%s\n", string.value);
     SteelbladeCleanup();
