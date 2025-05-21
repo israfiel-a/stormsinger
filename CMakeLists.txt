@@ -45,6 +45,8 @@ option(STORMSINGER_DISABLE_VALIDATION_LAYERS "Don't use Vulkan validation layers
 set(STORMSINGER_DISABLE_VALIDATION_LAYERS ${STORMSINGER_RELEASE} CACHE BOOL 
 	"Don't use Vulkan validation layers." FORCE)
 
+option(STORMSINGER_DISABLE_ASAN "Never use ASAN, even if in debug mode." OFF)
+
 ############################################################################
 ## Output Directories
 ############################################################################
@@ -82,10 +84,14 @@ if(MSVC)
 		/external:anglebrackets /wd4711 /wd4710 /wd4061 /wd5045 /wd4996)
 
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-		list(APPEND STORMSINGER_COMPILER_OPTIONS /Od /Zi /Zo /EHa /EHr 
-			/fsanitize=address /fsanitize=fuzzer /fsanitize-coverage=edge 
-			/fsanitize-coverage=inline-8bit-counters 
-			/fsanitize-coverage=trace-cmp /fsanitize-coverage=trace-div)
+		list(APPEND STORMSINGER_COMPILER_OPTIONS /Od /Zi /Zo /EHa /EHr)
+        
+        if(NOT ${STORMSINGER_DISABLE_ASAN})
+            list(APPEND STORMSINGER_COMPILER_OPTIONS /fsanitize=address 
+                /fsanitize=fuzzer /fsanitize-coverage=edge 
+                /fsanitize-coverage=inline-8bit-counters 
+                /fsanitize-coverage=trace-cmp /fsanitize-coverage=trace-div)
+        endif()
 	else()
 		list(APPEND STORMSINGER_COMPILER_OPTIONS /O2 /fp:fast /GL /GS- 
 			/Gw /Qpar)
@@ -99,13 +105,17 @@ else()
         # Note that, in order for sanitize=pointer-compare to properly work
         # at runtime, one has to add detect_invalid_pointer_pairs=2 to their
         # ASAN_OPTIONS ENV variable.
-		list(APPEND STORMSINGER_COMPILER_OPTIONS -Og -g3 -ggdb
-            -fsanitize=address -fsanitize=pointer-compare -fsanitize=leak
-            -fsanitize=pointer-subtract -fsanitize=undefined)
-        add_link_options(-fsanitize=address -fsanitize=undefined)
-
+		list(APPEND STORMSINGER_COMPILER_OPTIONS -Og -g3 -ggdb)
+        
         if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
             list(APPEND STORMSINGER_COMPILER_OPTIONS -fanalyzer)
+        endif()
+        
+        if(NOT ${STORMSINGER_DISABLE_ASAN})
+            list(APPEND STORMSINGER_COMPILER_OPTIONS -fsanitize=address 
+                -fsanitize=pointer-compare -fsanitize=leak
+                -fsanitize=pointer-subtract -fsanitize=undefined)
+            add_link_options(-fsanitize=address -fsanitize=undefined)
         endif()
 	else()
 		list(APPEND STORMSINGER_COMPILER_OPTIONS -Ofast -flto)
