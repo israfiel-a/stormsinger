@@ -3,7 +3,8 @@
  * @authors Israfil Argos (israfiel-a)
  * @brief The public interface for the Steelblade module of the Chainbinder
  * engine. This provides a string wrapper, and several helpful string
- * manipulation functions.
+ * manipulation functions, alongside controls for the arena within which
+ * the strings are allocated.
  * @since 0.1.2
  * @updated 0.1.2
  *

@@ -17,10 +17,8 @@ static char *GetArenaBlock(size_t size, steelblade_error_t *error)
     }
     else if (trueSize > arena.end)
     {
-        arena.buffer =
-            realloc(arena.buffer, arena.size += (trueSize - arena.end));
-        arena.end += trueSize - arena.end;
-        arena.offset = arena.buffer + arena.size - arena.end;
+        Steelblade_StretchArena(trueSize - arena.end, error);
+        if (*error != STEELBLADE_OKAY) return 0;
     }
     char *block = arena.offset;
     arena.offset += trueSize;
@@ -56,7 +54,7 @@ steelblade_error_t SteelbladeBegin(size_t size)
 
     arena.size = size;
     arena.end = size;
-    arena.buffer = calloc(arena.size, 1);
+    arena.buffer = malloc(arena.size);
     if (arena.buffer == 0) return STEELBLADE_FAILED_ALLOCATION;
     arena.offset = arena.buffer;
     return STEELBLADE_OKAY;
@@ -97,6 +95,7 @@ void Steelblade_StretchArena(size_t amount, steelblade_error_t *error)
         return;
     }
     arena.end += amount;
+    arena.offset = arena.buffer + arena.size - arena.end;
     *error = STEELBLADE_OKAY;
 }
 
@@ -120,6 +119,7 @@ void Steelblade_ShrinkArena(size_t amount, steelblade_error_t *error)
         *error = STEELBLADE_FAILED_ALLOCATION;
         return;
     }
+    arena.offset = arena.buffer + arena.size - arena.end;
     *error = STEELBLADE_OKAY;
 }
 
