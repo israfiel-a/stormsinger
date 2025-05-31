@@ -5,9 +5,9 @@
  * creation interface.
  *
  * @since 0.1.1
- * @updated 0.1.1
+ * @updated 0.1.2
  *
- * @copyright (c) 2024-2025 - Israfil Argos
+ * @copyright (c) 2024-2025 - the Stormsinger Project
  * This document is under the GNU Affero General Public License v3.0. It
  * can be modified and distributed (commercially or otherwise) freely, and
  * can be used privately and within patents. No liability or warranty is
@@ -19,7 +19,8 @@
 
 #include <Reporting.h>
 #include <Vulkan/Context.h>
-#include <Vulkan/Definitions.h>
+#include <Vulkan/Device.h>
+#include <string.h>
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -45,11 +46,9 @@ static VkInstance instance = CHAINBINDER_NULLPTR;
  * extensionCount and extensions parameters is not guaranteed to mean
  * anything.
  */
-CHAINBINDER_NONNULL(1, 2)
-CHAINBINDER_FLATTEN
-CHAINBINDER_NOIGNORE
-static inline bool GetGLFWSupport(uint32_t *extensionCount,
-                                  const char ***extensions)
+CHAINBINDER_NONNULL(1, 2) CHAINBINDER_FLATTEN
+CHAINBINDER_NOIGNORE static inline bool
+GetGLFWSupport(uint32_t *extensionCount, const char ***extensions)
 {
     int supportFlag = glfwVulkanSupported();
     if (supportFlag != GLFW_TRUE) return false;
@@ -72,8 +71,8 @@ static inline bool GetGLFWSupport(uint32_t *extensionCount,
  * @param applicationInfo The storage place for the created application
  * info.
  */
-CHAINBINDER_NONNULL(1)
-static void AssembleApplication(VkApplicationInfo *applicationInfo)
+CHAINBINDER_NONNULL(1) static void
+AssembleApplication(VkApplicationInfo *applicationInfo)
 {
     VkApplicationInfo applicationCreateInfo = {0};
     applicationCreateInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -96,6 +95,51 @@ static void AssembleApplication(VkApplicationInfo *applicationInfo)
                     STORMSINGER_VERSION_PATCH);
 }
 
+#if !STORMSINGER_DISABLE_VALIDATION_LAYERS
+
+static bool FindValidationLayers(void)
+{
+    uint32_t layerCount = 0;
+    CHAINBINDER_CHECK_RESULT(
+        vkEnumerateInstanceLayerProperties(&layerCount,
+                                           CHAINBINDER_NULLPTR),
+        "Failed to enumerate instance extensions. Code: %d.");
+
+    VkLayerProperties *layerProperties;
+    CHAINBINDER_ALLOCATE(layerProperties,
+                         sizeof(VkLayerProperties) * layerCount);
+    // We simply assume that since the first poll didn't fail, this one
+    // won't either.
+    vkEnumerateInstanceLayerProperties(&layerCount, layerProperties);
+
+    chainbinder_size_t foundLayers = 0;
+    for (chainbinder_size_t i = 0; i < layerCount; i++)
+    {
+        if (foundLayers == chainbinderValidationCount) return true;
+
+        // Ugly, ugly nested loop, but works well. Unfortunately not every
+        // solution can be pretty...nor efficient. This is like O(n^3).
+        VkLayerProperties layer = layerProperties[i];
+        for (chainbinder_size_t j = 0; j < chainbinderValidationCount; j++)
+        {
+            const char *validationName = chainbinderValidationLayers[j];
+            if (strcmp(layer.layerName, validationName) == 0)
+            {
+                Chainbinder_Log(CHAINBINDER_VERBOSE, "Found layer %s.",
+                                validationName);
+                foundLayers++;
+                break;
+            }
+        }
+    }
+    // Trailing validation layer found!
+    if (foundLayers == chainbinderValidationCount) return true;
+
+    return false;
+}
+
+#endif
+
 /**
  * @brief Assemble the instance creation information structure. This also
  * decides what validation layers and extensions our instance is going to
@@ -111,10 +155,9 @@ static void AssembleApplication(VkApplicationInfo *applicationInfo)
  * @returns A boolean representing the success of polling GLFW for
  * extensions.
  */
-CHAINBINDER_NONNULL(1, 2)
-CHAINBINDER_NOIGNORE
-static bool AssembleInstance(const VkApplicationInfo *applicationInfo,
-                             VkInstanceCreateInfo *instanceInfo)
+CHAINBINDER_NONNULL(1, 2) CHAINBINDER_NOIGNORE static bool
+AssembleInstance(const VkApplicationInfo *applicationInfo,
+                 VkInstanceCreateInfo *instanceInfo)
 {
     VkInstanceCreateInfo instanceCreateInfo = {0};
     instanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -134,10 +177,20 @@ static bool AssembleInstance(const VkApplicationInfo *applicationInfo,
                     "GLFW reported %d required extensions.",
                     glfwExtensionCount);
 
+#if !STORMSINGER_DISABLE_VALIDATION_LAYERS
+    if (!FindValidationLayers())
+    {
+        Chainbinder_Log(CHAINBINDER_ERROR,
+                        "Failed to find validation layers.");
+        return false;
+    }
+#endif
+
     instanceCreateInfo.enabledExtensionCount = glfwExtensionCount;
-    instanceCreateInfo.enabledLayerCount = 0;
     instanceCreateInfo.ppEnabledExtensionNames = glfwExtensionNames;
-    instanceCreateInfo.ppEnabledLayerNames = CHAINBINDER_NULLPTR;
+    instanceCreateInfo.enabledLayerCount = chainbinderValidationCount;
+    instanceCreateInfo.ppEnabledLayerNames = chainbinderValidationLayers;
+
     *instanceInfo = instanceCreateInfo;
     Chainbinder_Log(CHAINBINDER_VERBOSE,
                     "Assembled instance information.");
@@ -154,10 +207,14 @@ bool Chainbinder_CreateVulkanInstance(void)
     bool assembled = AssembleInstance(&applicationInfo, &createInfo);
     if (!assembled) return false;
 
-    CHECK_RESULT(
+    CHAINBINDER_CHECK_RESULT(
         vkCreateInstance(&createInfo, CHAINBINDER_NULLPTR, &instance),
         "Failed to create Vulkan instance. Code: %d.");
     Chainbinder_Log(CHAINBINDER_SUCCESS, "Created Vulkan instance.");
+
+    // TODO: Check returns.
+    Chainbinder_FindPhysicalDevice();
+    Chainbinder_CreateLogicalDevice();
 
     return true;
 }
@@ -167,3 +224,5 @@ void Chainbinder_DestroyVulkanInstance(void)
     vkDestroyInstance(instance, CHAINBINDER_NULLPTR);
     Chainbinder_Log(CHAINBINDER_NOTICE, "Destroyed Vulkan instance.");
 }
+
+VkInstance Chainbinder_GetVulkanInstance(void) { return instance; }

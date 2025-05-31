@@ -7,7 +7,7 @@
  * @since 0.1.0
  * @updated 0.1.1
  *
- * @copyright (c) 2024-2025 - Israfil Argos
+ * @copyright (c) 2024-2025 - the Stormsinger Project
  * This document is under the GNU Affero General Public License v3.0. It
  * can be modified and distributed (commercially or otherwise) freely, and
  * can be used privately and within patents. No liability or warranty is
@@ -28,7 +28,7 @@
  * @since 0.1.1
  * @updated 0.1.1
  */
-CHAINBINDER_ENUM(chainbinder_window_type_t, CHAINBINDER_SPLASHSCREEN,
+CHAINBINDER_ENUM(window_type, CHAINBINDER_SPLASHSCREEN,
                  CHAINBINDER_GAMEWINDOW);
 
 /**
@@ -36,20 +36,17 @@ CHAINBINDER_ENUM(chainbinder_window_type_t, CHAINBINDER_SPLASHSCREEN,
  * already created, this function will return immediately.
  *
  * @since 0.1.0
- * @updated 0.1.1
+ * @updated 0.1.2
  *
  * @see Chainbinder_DestroyWindow(void) to destroy the window created via
  * this function.
  *
- * @param title The desired title for the window.
  * @param type The type of window to create.
  *
  * @returns A boolean flag representing the success of this operation.
  */
-CHAINBINDER_NONNULL(1)
-CHAINBINDER_NOIGNORE
-bool Chainbinder_CreateWindow(const char *const title,
-                              chainbinder_window_type_t type);
+CHAINBINDER_NOIGNORE bool
+Chainbinder_CreateWindow(chainbinder_window_type_t type);
 
 /**
  * @brief Destroy the currently created window.

@@ -5,9 +5,9 @@
  * context for the engine.
  *
  * @since 0.1.1
- * @updated 0.1.1
+ * @updated 0.1.2
  *
- * @copyright (c) 2024-2025 - Israfil Argos
+ * @copyright (c) 2024-2025 - the Stormsinger Project
  * This document is under the GNU Affero General Public License v3.0. It
  * can be modified and distributed (commercially or otherwise) freely, and
  * can be used privately and within patents. No liability or warranty is
@@ -20,6 +20,24 @@
 #define CHAINBINDER_VULKAN_CONTEXT_H
 
 #include <Chainbinder.h>
+#include <Vulkan/Definitions.h>
+
+#if !STORMSINGER_DISABLE_VALIDATION_LAYERS
+
+// u32 for a reason, otherwise msvc complains about converting implicitly
+// to u32
+static const chainbinder_u32_t chainbinderValidationCount = 1;
+
+static CHAINBINDER_STRING_ARRAY(ValidationLayers,
+                                "VK_LAYER_KHRONOS_validation");
+
+#else
+
+static const chainbinder_u32_t chainbinderValidationCount = 0;
+
+static CHAINBINDER_STRING_ARRAY(ValidationLayers, CHAINBINDER_NULLPTR);
+
+#endif
 
 /**
  * @brief Create the Vulkan instance.
@@ -30,11 +48,10 @@
  * @see Chainbinder_DestroyVulkanInstance(void) To destroy this created
  * instance.
  *
- * @returns A boolean value representing whether or not the instance was
- * created successfully.
+ * @returns A boolean value representing whether or not the instance
+ * was created successfully.
  */
-CHAINBINDER_NOIGNORE
-bool Chainbinder_CreateVulkanInstance(void);
+CHAINBINDER_NOIGNORE bool Chainbinder_CreateVulkanInstance(void);
 
 /**
  * @brief Destroy the Vulkan instance.
@@ -48,5 +65,7 @@ bool Chainbinder_CreateVulkanInstance(void);
  * has to be destroyed manually.
  */
 void Chainbinder_DestroyVulkanInstance(void);
+
+VkInstance Chainbinder_GetVulkanInstance(void);
 
 #endif // CHAINBINDER_VULKAN_CONTEXT_H

@@ -6,9 +6,9 @@
  * provides ample information for debugging purposes.
  *
  * @since 0.1.0
- * @updated 0.1.1
+ * @updated 0.1.2
  *
- * @copyright (c) 2024-2025 - Israfil Argos
+ * @copyright (c) 2024-2025 - the Stormsinger Project
  * This document is under the GNU Affero General Public License v3.0. It
  * can be modified and distributed (commercially or otherwise) freely, and
  * can be used privately and within patents. No liability or warranty is
@@ -30,8 +30,8 @@
  * @since 0.1.0
  * @updated 0.1.1
  */
-CHAINBINDER_ENUM(chainbinder_log_type_t, CHAINBINDER_VERBOSE,
-                 CHAINBINDER_LOG, CHAINBINDER_SUCCESS, CHAINBINDER_NOTICE,
+CHAINBINDER_ENUM(log_type, CHAINBINDER_VERBOSE, CHAINBINDER_LOG,
+                 CHAINBINDER_SUCCESS, CHAINBINDER_NOTICE,
                  CHAINBINDER_WARNING, CHAINBINDER_ERROR);
 
 /**
@@ -48,52 +48,57 @@ CHAINBINDER_ENUM(chainbinder_log_type_t, CHAINBINDER_VERBOSE,
  * @param line The line the log came from.
  * @param type The type of log this is.
  * @param format The format string for the log.
- * @param ... An arguments to be inserted into the format string,
+ * @param ... Any arguments to be inserted into the format string,
  * printf-style.
  */
-CHAINBINDER_NONNULL(4)
-CHAINBINDER_PRINTF(4, 5)
-CHAINBINDER_HOT
-void(Chainbinder_Log)(const char *const filename, chainbinder_u16_t line,
-                      chainbinder_log_type_t type,
-                      const char *const format, ...);
+CHAINBINDER_NONNULL(4) CHAINBINDER_PRINTF(4, 5)
+CHAINBINDER_HOT void(Chainbinder_Log)(const char *const filename,
+                                      chainbinder_u16_t line,
+                                      chainbinder_log_type_t type,
+                                      const char *const format, ...);
 
 #if STORMSINGER_DISABLE_LOGS
-    #define Chainbinder_Log(...)
-#elif STORMSINGER_STRIP_LOG_METADATA
-    // We have to define a case for this to prevent the storage of unneeded
-    // strings and value (filenames, line numbers).
 
-    /**
-     * @brief A macro wrapper for the internal logging function that allows
-     * for ease-of-invocation and extra metadata grabbing.
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     *
-     * @param type The type of log this is.
-     * @param format The format string for the log.
-     * @param ... An arguments to be inserted into the format string,
-     * printf-style.
-     */
-    #define Chainbinder_Log(type, format, ...)                            \
-        Chainbinder_Log(NULL, 0, type, format __VA_OPT__(, ) __VA_ARGS__)
+#define Chainbinder_Log(...)
+
+#elif STORMSINGER_STRIP_LOG_METADATA
+
+// We have to define a case for this to prevent the storage of unneeded
+// strings and value (filenames, line numbers).
+
+/**
+ * @brief A macro wrapper for the internal logging function that allows
+ * for ease-of-invocation and extra metadata grabbing.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ *
+ * @param type The type of log this is.
+ * @param format The format string for the log.
+ * @param ... Any arguments to be inserted into the format string,
+ * printf-style.
+ */
+#define Chainbinder_Log(type, format, ...)                                \
+    Chainbinder_Log(NULL, 0, type, format __VA_OPT__(, ) __VA_ARGS__)
+
 #else
-    /**
-     * @brief A macro wrapper for the internal logging function that allows
-     * for ease-of-invocation and extra metadata grabbing.
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     *
-     * @param type The type of log this is.
-     * @param format The format string for the log.
-     * @param ... An arguments to be inserted into the format string,
-     * printf-style.
-     */
-    #define Chainbinder_Log(type, format, ...)                            \
-        Chainbinder_Log(FILENAME, __LINE__, type,                         \
-                        format __VA_OPT__(, ) __VA_ARGS__)
+
+/**
+ * @brief A macro wrapper for the internal logging function that allows
+ * for ease-of-invocation and extra metadata grabbing.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ *
+ * @param type The type of log this is.
+ * @param format The format string for the log.
+ * @param ... Any arguments to be inserted into the format string,
+ * printf-style.
+ */
+#define Chainbinder_Log(type, format, ...)                                \
+    Chainbinder_Log(FILENAME, __LINE__, type,                             \
+                    format __VA_OPT__(, ) __VA_ARGS__)
+
 #endif // STORMSINGER_DISABLE_LOGS
 
 #endif // CHAINBINDER_REPORTING_H

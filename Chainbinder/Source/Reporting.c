@@ -5,9 +5,9 @@
  * interface for Chainbinder.
  *
  * @since 0.1.0
- * @updated 0.1.1
+ * @updated 0.1.2
  *
- * @copyright (c) 2024-2025 - Israfil Argos
+ * @copyright (c) 2024-2025 - the Stormsinger Project
  * This document is under the GNU Affero General Public License v3.0. It
  * can be modified and distributed (commercially or otherwise) freely, and
  * can be used privately and within patents. No liability or warranty is
@@ -54,13 +54,10 @@ static const char *const string_descriptors[] = {"VERB", "INFO", " OK ",
  * @param type The type of log we're sending. This decides the decoration
  * prefix.
  */
-CHAINBINDER_FLATTEN
-CHAINBINDER_ALWAYSINLINE
-CHAINBINDER_NONNULL(1, 2)
-inline static void LogPrefix(FILE *const output,
-                             const char *const filename,
-                             chainbinder_u16_t line,
-                             chainbinder_log_type_t type)
+CHAINBINDER_FLATTEN CHAINBINDER_ALWAYSINLINE
+CHAINBINDER_NONNULL(1, 2) inline static void
+LogPrefix(FILE *const output, const char *const filename,
+          chainbinder_u16_t line, chainbinder_log_type_t type)
 {
     fprintf(output,
             "[\033[%" PRIuFAST8 "m%s\033[0m] %-12s @ ln. %.04" PRIuFAST16

@@ -12,8 +12,8 @@
 
 set(CHAINBINDER_PUBLIC_INTERFACE "Chainbinder.h")
 # Globs aren't best practice, but to be honest I'm lazy.
-file(GLOB CHAINBINDER_SOURCES "Source/*.c" "Include/*.h" "Source/Vulkan/*.c" 
-	"Include/Vulkan/*.h")
+file(GLOB CHAINBINDER_SOURCES  "Chainbinder.c" "Source/*.c" "Include/*.h" 
+    "Source/Vulkan/*.c" "Include/Vulkan/*.h")
 
 ############################################################################
 ## Dependency Wrangling
@@ -66,6 +66,11 @@ if(UNIX)
         target_link_libraries(${X11_LIBRARIES})
     endif()
 endif()
+
+add_subdirectory("Steelblade") # String wrapper.
+add_dependencies(Chainbinder Steelblade)
+target_link_libraries(Chainbinder PUBLIC Steelblade)
+target_include_directories(Chainbinder PUBLIC "Steelblade")
 
 ############################################################################
 ## Compilation Options

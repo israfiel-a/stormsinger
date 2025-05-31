@@ -5,9 +5,9 @@
  * checking procedures.
  *
  * @since 0.1.1
- * @updated 0.1.1
+ * @updated 0.1.2
  *
- * @copyright (c) 2024-2025 - Israfil Argos
+ * @copyright (c) 2024-2025 - the Stormsinger Project
  * This document is under the GNU Affero General Public License v3.0. It
  * can be modified and distributed (commercially or otherwise) freely, and
  * can be used privately and within patents. No liability or warranty is
@@ -29,7 +29,7 @@
  * @since 0.1.1
  * @updated 0.1.1
  */
-#define CHECK_RESULT(expression, message, ...)                            \
+#define CHAINBINDER_CHECK_RESULT(expression, message, ...)                \
     {                                                                     \
         VkResult result = expression;                                     \
         if (result != VK_SUCCESS)                                         \

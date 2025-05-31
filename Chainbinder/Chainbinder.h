@@ -5,9 +5,9 @@
  * provides all functionality one needs to properly use Chainbinder.
  *
  * @since 0.1.0
- * @updated 0.1.1
+ * @updated 0.1.2
  *
- * @copyright (c) 2024-2025 - Israfil Argos
+ * @copyright (c) 2024-2025 - the Stormsinger Project
  * This document is under the GNU Affero General Public License v3.0. It
  * can be modified and distributed (commercially or otherwise) freely, and
  * can be used privately and within patents. No liability or warranty is
@@ -20,177 +20,183 @@
 #define CHAINBINDER_ROOT_H
 
 #include <inttypes.h>
+#include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h> // IWYU pragma: keep
 
 // Define cross-platform attributes for functions, variables, and
 // structures. I really, really wish that MS supported the full C23 spec,
 // but alas.
 #ifdef _MSC_VER
-    // MSVC yet does not ship built-in boolean literals.
-    #include <stdbool.h>
 
-    /**
-     * @brief A directive that results in whatever structure it's applied
-     * to being packed into as little memory as possible.
-     *
-     * @since 0.1.0
-     * @updated 0.1.1
-     *
-     * @note This has zero effect on this platform (Windows).
-     */
-    #define CHAINBINDER_PACKED
+// MSVC yet does not ship built-in boolean literals.
+#include <stdbool.h>
 
-    /**
-     * @brief A value corresponding a pointer "to nowhere" of sorts.
-     * Defined because Microsoft is lazy and refused to support the C23
-     * specification in its entirety.
-     *
-     * @since 0.1.0
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_NULLPTR NULL
+/**
+ * @brief A directive that results in whatever structure it's applied
+ * to being packed into as little memory as possible.
+ *
+ * @since 0.1.0
+ * @updated 0.1.1
+ *
+ * @note This has zero effect on this platform (Windows).
+ */
+#define CHAINBINDER_PACKED
 
-    //! God damn you Microsoft. Why are you so annoying with supporting C?
-    //! Just port your C++ code, most features are just increased crossover
-    //! support. Please, I'm begging.
+/**
+ * @brief A value corresponding a pointer "to nowhere" of sorts.
+ * Defined because Microsoft is lazy and refused to support the C23
+ * specification in its entirety.
+ *
+ * @since 0.1.0
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_NULLPTR NULL
 
-    /**
-     * @brief The given arguments MUST be non-null.
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_NONNULL(...)
+//! God damn you Microsoft. Why are you so annoying with supporting C?
+//! Just port your C++ code, most features are just increased crossover
+//! support. Please, I'm begging.
 
-    /**
-     * @brief This function NEVER returns null.
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_RETURNS_NONNULL(...)
+/**
+ * @brief The given arguments MUST be non-null.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_NONNULL(...)
 
-    /**
-     * @brief This function should be mushed down and inlined as much as
-     * physically possible.
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_FLATTEN
+/**
+ * @brief This function NEVER returns null.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_RETURNS_NONNULL(...)
 
-    /**
-     * @brief The return value of this function should not be null.
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_NOIGNORE
+/**
+ * @brief This function should be mushed down and inlined as much as
+ * physically possible.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_FLATTEN
 
-    /**
-     * @brief This function is a printf-style output method.
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_PRINTF(format_string, args)
+/**
+ * @brief The return value of this function should not be null.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_NOIGNORE
 
-    /**
-     * @brief This function will be called often, and should be set
-     * aside for expressly that reason.
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_HOT
+/**
+ * @brief This function is a printf-style output method.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_PRINTF(format_string, args)
 
-    /**
-     * @brief This function should always be inlined, regardless of the
-     * compiler's opinion (sort of).
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_ALWAYSINLINE
+/**
+ * @brief This function will be called often, and should be set
+ * aside for expressly that reason.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_HOT
+
+/**
+ * @brief This function should always be inlined, regardless of the
+ * compiler's opinion (sort of).
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_ALWAYSINLINE
+
 #else
-    /**
-     * @brief A directive that results in whatever structure it's applied
-     * to being packed into as little memory as possible.
-     *
-     * @since 0.1.0
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_PACKED [[gnu::packed]]
 
-    /**
-     * @brief A value corresponding a pointer "to nowhere" of sorts.
-     * Defined because Microsoft is lazy and refused to support the C23
-     * specification in its entirety.
-     *
-     * @since 0.1.0
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_NULLPTR nullptr
+/**
+ * @brief A directive that results in whatever structure it's applied
+ * to being packed into as little memory as possible.
+ *
+ * @since 0.1.0
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_PACKED [[gnu::packed]]
 
-    /**
-     * @brief The given arguments MUST be non-null.
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_NONNULL(...) [[gnu::nonnull(__VA_ARGS__)]]
+/**
+ * @brief A value corresponding a pointer "to nowhere" of sorts.
+ * Defined because Microsoft is lazy and refused to support the C23
+ * specification in its entirety.
+ *
+ * @since 0.1.0
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_NULLPTR nullptr
 
-    /**
-     * @brief This function NEVER returns null.
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_RETURNS_NONNULL(...) [[gnu::returns_nonnull]]
+/**
+ * @brief The given arguments MUST be non-null.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_NONNULL(...) [[gnu::nonnull(__VA_ARGS__)]]
 
-    /**
-     * @brief This function should be mushed down and inlined as much as
-     * physically possible.
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_FLATTEN [[gnu::flatten]]
+/**
+ * @brief This function NEVER returns null.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_RETURNS_NONNULL(...) [[gnu::returns_nonnull]]
 
-    /**
-     * @brief The return value of this function should not be null.
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_NOIGNORE [[nodiscard]]
+/**
+ * @brief This function should be mushed down and inlined as much as
+ * physically possible.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_FLATTEN [[gnu::flatten]]
 
-    /**
-     * @brief This function is a printf-style output method.
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_PRINTF(format_string, args)                       \
-        [[gnu::format(printf, format_string, args)]]
+/**
+ * @brief The return value of this function should not be null.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_NOIGNORE [[nodiscard]]
 
-    /**
-     * @brief This function will be called often, and should be set
-     * aside for expressly that reason.
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_HOT [[gnu::hot]]
+/**
+ * @brief This function is a printf-style output method.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_PRINTF(format_string, args)                           \
+    [[gnu::format(printf, format_string, args)]]
 
-    /**
-     * @brief This function should always be inlined, regardless of the
-     * compiler's opinion (sort of).
-     *
-     * @since 0.1.1
-     * @updated 0.1.1
-     */
-    #define CHAINBINDER_ALWAYSINLINE [[gnu::always_inline]]
+/**
+ * @brief This function will be called often, and should be set
+ * aside for expressly that reason.
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_HOT [[gnu::hot]]
+
+/**
+ * @brief This function should always be inlined, regardless of the
+ * compiler's opinion (sort of).
+ *
+ * @since 0.1.1
+ * @updated 0.1.1
+ */
+#define CHAINBINDER_ALWAYSINLINE [[gnu::always_inline]]
+
 #endif // _MSC_VER
 
 /**
@@ -205,7 +211,14 @@
     typedef enum CHAINBINDER_PACKED                                       \
     {                                                                     \
         __VA_ARGS__                                                       \
-    } name
+    } chainbinder_##name##_t
+
+#define CHAINBINDER_STRING_ARRAY(name, ...)                               \
+    const char *const chainbinder##name[] = {__VA_ARGS__}
+
+#define CHAINBINDER_ALLOCATE(item, size)                                  \
+    item = malloc(size);                                                  \
+    if (item == CHAINBINDER_NULLPTR) return false;
 
 /**
  * @brief The unsigned 8-bit integer type the engine uses. This works out
@@ -287,6 +300,8 @@ typedef int_fast32_t chainbinder_i32_t;
  */
 typedef int_fast64_t chainbinder_i64_t;
 
+typedef size_t chainbinder_size_t;
+
 /**
  * @brief An enumerator describing all the various error codes a function
  * can throw. If an engine function returns a false-evaluating value
@@ -298,8 +313,12 @@ typedef int_fast64_t chainbinder_i64_t;
  * @see Chainbinder_GetError(void) You can retrieve a recorded error code
  * via this function.
  */
-CHAINBINDER_ENUM(chainbinder_error_t, CHAINBINDER_FAILED_NONE,
-                 CHAINBINDER_FAILED_VULKAN, CHAINBINDER_FAILED_VMA);
+CHAINBINDER_ENUM(error, CHAINBINDER_FAILED_NONE, CHAINBINDER_FAILED_VULKAN,
+                 CHAINBINDER_FAILED_VMA);
+
+CHAINBINDER_ENUM(file_permission, CHAINBINDER_READ, CHAINBINDER_WRITE,
+                 CHAINBINDER_EXECUTE, CHAINBINDER_RW, CHAINBINDER_RWE,
+                 CHAINBINDER_EXISTS);
 
 /**
  * @brief Initialize the Chainbinder engine, and all of its subprocesses.
@@ -320,9 +339,8 @@ CHAINBINDER_ENUM(chainbinder_error_t, CHAINBINDER_FAILED_NONE,
  * @returns A boolean value expressing whether or not the initialization
  * succeeded.
  */
-CHAINBINDER_NOIGNORE
-CHAINBINDER_NONNULL(2)
-bool Chainbinder_Initialize(int argc, char **argv);
+CHAINBINDER_NOIGNORE CHAINBINDER_NONNULL(2) bool
+Chainbinder_Initialize(int argc, char **argv);
 
 /**
  * @brief Chean up the Chainbinder engine and all of its data. Past the
@@ -361,7 +379,16 @@ void Chainbinder_Run(void);
  *
  * @returns The most recently recorded error code.
  */
-CHAINBINDER_NOIGNORE
-chainbinder_error_t Chainbinder_GetError(void);
+CHAINBINDER_NOIGNORE chainbinder_error_t Chainbinder_GetError(void);
+
+// sets errno for reason
+CHAINBINDER_NONNULL(1) CHAINBINDER_NOIGNORE bool
+Chainbinder_FileExists(const char *fileName);
+
+bool Chainbinder_FileExecutable(const char *fileName);
+
+int Chainbinder_Execute(const char *fileName, char **argv);
+
+bool Chainbinder_DeleteFile(const char *fileName);
 
 #endif // CHAINBINDER_ROOT_H
