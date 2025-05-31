@@ -3,7 +3,7 @@
 ---
 
 ### Stormsinger
-![workflow_badge](https://img.shields.io/github/actions/workflow/status/israfiel-a/stormsinger/cmake-multi-platform.yml?label=Build%20Test)
+![workflow_badge](https://img.shields.io/github/actions/workflow/status/israfiel-a/stormsinger/build-test.yml?label=Build%20Test)
 ![loc_badge](https://github.com/israfiel-a/stormsinger/blob/badges/loc.svg)
 ![latest_stable_badge](https://img.shields.io/github/v/release/israfiel-a/stormsinger?label=Stable&color=blue)
 ![latest_unstable_badge](https://img.shields.io/github/v/release/israfiel-a/stormsinger?label=Experimental&include_preleases=true)
