@@ -1,9 +1,9 @@
-#include <Windowing/Wayland/Registry.h>
+#include <Window/Wayland/Registry.h>
 #include <string.h>
 #include <xdg-shell-protocol.h>
 
-#include <Windowing/Wayland/Compositor.h>
-#include <Windowing/Wayland/Shell.h>
+#include <Window/Wayland/Compositor.h>
+#include <Window/Wayland/Shell.h>
 
 static struct wl_registry *pRegistry = nullptr;
 

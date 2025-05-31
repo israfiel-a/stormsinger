@@ -1,5 +1,5 @@
-#ifndef STORMSINGER_WINDOWING_H
-#define STORMSINGER_WINDOWING_H
+#ifndef STORMSINGER_WINDOW_H
+#define STORMSINGER_WINDOW_H
 
 bool stormsinger_createWindow(void);
 

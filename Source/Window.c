@@ -1,7 +1,7 @@
-#include <Windowing.h>
+#include <Window.h>
 
 #ifdef STORMSINGER_WAYLAND
-#include <Windowing/Wayland.h>
+#include <Window/Wayland.h>
 #endif
 
 bool stormsinger_createWindow(void)

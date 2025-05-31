@@ -1,5 +1,5 @@
-#include <Windowing/Wayland/Compositor.h>
-#include <Windowing/Wayland/Shell.h>
+#include <Window/Wayland/Compositor.h>
+#include <Window/Wayland/Shell.h>
 #include <stdio.h>
 #include <wayland-client.h>
 

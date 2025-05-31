@@ -1,9 +1,9 @@
-#include <Windowing/Wayland.h>
+#include <Window/Wayland.h>
 #include <stdio.h>
 #include <wayland-client.h>
 
-#include <Windowing/Wayland/Compositor.h>
-#include <Windowing/Wayland/Registry.h>
+#include <Window/Wayland/Compositor.h>
+#include <Window/Wayland/Registry.h>
 
 static struct wl_display *pDisplay = nullptr;
 

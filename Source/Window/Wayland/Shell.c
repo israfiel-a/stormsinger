@@ -1,4 +1,4 @@
-#include <Windowing/Wayland/Shell.h>
+#include <Window/Wayland/Shell.h>
 #include <xdg-shell-protocol.h>
 
 static struct xdg_wm_base *pShell = nullptr;
