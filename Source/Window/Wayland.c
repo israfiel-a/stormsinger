@@ -22,3 +22,5 @@ bool stormsinger_waylandConnect(void)
 
     return true;
 }
+
+struct wl_display *stormsinger_waylandGetDisplay(void) { return pDisplay; }

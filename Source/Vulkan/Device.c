@@ -27,7 +27,7 @@ uint32_t scoreDevice(VkPhysicalDevice device)
     return score;
 }
 
-bool stormsinger_getVulkanDevice(VkInstance instance)
+bool stormsinger_vulkanCreateDevice(VkInstance instance)
 {
     uint32_t physicalCount = 0;
     vkEnumeratePhysicalDevices(instance, &physicalCount, nullptr);

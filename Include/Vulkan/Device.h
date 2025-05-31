@@ -3,6 +3,6 @@
 
 #include <vulkan/vulkan.h>
 
-bool stormsinger_getVulkanDevice(VkInstance instance);
+bool stormsinger_vulkanCreateDevice(VkInstance instance);
 
 #endif // STORMSINGER_VULKAN_DEVICE_H

@@ -1,11 +1,12 @@
 #include <Vulkan.h>
 #include <Vulkan/Device.h>
+#include <Vulkan/Surface.h>
 #include <stdio.h>
 #include <vulkan/vulkan.h>
 
 static VkInstance pInstance = nullptr;
 
-bool stormsinger_initializeVulkan(void)
+bool stormsinger_vulkanInitialize(void)
 {
     VkApplicationInfo applicationInfo = {0};
     applicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -39,7 +40,8 @@ bool stormsinger_initializeVulkan(void)
         return false;
     }
 
-    if (!stormsinger_getVulkanDevice(pInstance)) return false;
+    if (!stormsinger_vulkanCreateDevice(pInstance)) return false;
+    if (!stormsinger_vulkanCreateSurface(pInstance)) return false;
 
     return true;
 }

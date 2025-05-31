@@ -8,4 +8,6 @@ void stormsinger_waylandBindCompositor(struct wl_registry *registry,
 void stormsinger_waylandCreateWindow(struct wl_display *display);
 void stormsinger_waylandDestroyWindow();
 
+struct wl_surface *stormsinger_waylandGetSurface(void);
+
 #endif // STORMSINGER_WAYLAND_COMPOSITOR_H

@@ -7,7 +7,7 @@ int main(int argc, char **argv)
     (void)argv;
 
     stormsinger_createWindow();
-    stormsinger_initializeVulkan();
+    stormsinger_vulkanInitialize();
 
     return 0;
 }

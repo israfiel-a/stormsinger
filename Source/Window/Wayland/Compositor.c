@@ -87,3 +87,5 @@ void stormsinger_waylandCreateWindow(struct wl_display *display)
 }
 
 void stormsinger_waylandDestroyWindow() {}
+
+struct wl_surface *stormsinger_waylandGetSurface(void) { return pSurface; }
