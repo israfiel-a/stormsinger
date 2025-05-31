@@ -13,13 +13,18 @@
 ############################################################################
 
 cmake_minimum_required (VERSION 3.30 FATAL_ERROR)
-project("Stormsinger" LANGUAGES C VERSION 0.0.0.4)
+project("Stormsinger" LANGUAGES C VERSION 0.0.0.5)
 
 if(NOT DEFINED CMAKE_BUILD_TYPE)
 	message(WARNING "No build type provided. Defaulting to release.")
 	set(CMAKE_BUILD_TYPE "Release")
 endif()
 
+include(CMakeDependentOption)
+cmake_dependent_option(STORMSINGER_WAYLAND 
+    "Use Wayland. If unselected, X11 is used." ON "UNIX;NOT APPLE" OFF)
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/Modules")
 # Make our executable output into a directory we can plan for and predict.
 # Otherwise, in the future if CMake or the build structure changes
 # somewhat, we can dodge mystery linking issues. Also, it's prettier.
@@ -44,6 +49,7 @@ target_compile_options(Stormsinger PUBLIC -Wall -Wextra -Werror
     -Wpedantic -Wno-gnu-zero-variadic-macro-arguments)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_VERBOSE_MAKEFILE ON)
     set_target_properties(Stormsinger PROPERTIES EXPORT_COMPILE_COMMANDS ON)
 
     # Note that, in order for sanitize=pointer-compare to properly work
@@ -62,4 +68,9 @@ else()
     target_compile_options(Stormsinger PUBLIC -march=native 
         -mtune=native -Ofast -flto)
     target_link_options(Stormsinger PUBLIC -Ofast -flto)
+endif()
+
+if(STORMSINGER_WAYLAND)
+    find_package(Wayland REQUIRED)
+    target_link_libraries(Stormsinger ${Wayland_LIBRARIES})
 endif()
