@@ -13,7 +13,7 @@
 ############################################################################
 
 cmake_minimum_required (VERSION 3.30 FATAL_ERROR)
-project("Stormsinger" LANGUAGES C VERSION 0.0.0.5)
+project("Stormsinger" LANGUAGES C VERSION 0.0.0.6)
 
 if(NOT DEFINED CMAKE_BUILD_TYPE)
 	message(WARNING "No build type provided. Defaulting to release.")
@@ -33,8 +33,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Stormsinger")
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-add_executable(Stormsinger "${CMAKE_SOURCE_DIR}/Source/Entry.c"
-    "${CMAKE_SOURCE_DIR}/Source/Windowing.c")
+add_executable(Stormsinger 
+    "${CMAKE_SOURCE_DIR}/Source/Entry.c"
+    "${CMAKE_SOURCE_DIR}/Source/Windowing.c" 
+    "${CMAKE_SOURCE_DIR}/Source/Windowing/Wayland.c"
+    "${CMAKE_SOURCE_DIR}/Source/Windowing/Wayland/Registry.c"
+    "${CMAKE_SOURCE_DIR}/Source/Windowing/Wayland/Shell.c"
+    "${CMAKE_SOURCE_DIR}/Source/Windowing/Wayland/Compositor.c"
+)
 target_include_directories(Stormsinger PUBLIC "${CMAKE_SOURCE_DIR}/Include")
 
 # Give version information to source files.
@@ -71,6 +77,17 @@ else()
 endif()
 
 if(STORMSINGER_WAYLAND)
+    target_compile_definitions(Stormsinger PUBLIC STORMSINGER_WAYLAND)
+
     find_package(Wayland REQUIRED)
     target_link_libraries(Stormsinger ${Wayland_LIBRARIES})
+    target_include_directories(Stormsinger PUBLIC ${Wayland_INCLUDE_DIRS})
+    
+    find_package(Scanner REQUIRED)
+    ecm_add_wayland_client_protocol(Stormsinger PROTOCOL 
+        "${CMAKE_SOURCE_DIR}/Modules/Protocols/xdg-shell.xml" BASENAME 
+        xdg-shell PRIVATE_CODE)
+    # The above function adds the header into the build directory. We need to
+    # make sure we can wrangle said header.
+    target_include_directories(Stormsinger PUBLIC "${CMAKE_BINARY_DIR}")
 endif()

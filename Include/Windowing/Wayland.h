@@ -1,0 +1,6 @@
+#ifndef STORMSINGER_WINDOWING_WAYLAND_H
+#define STORMSINGER_WINDOWING_WAYLAND_H
+
+bool stormsinger_waylandConnect(void);
+
+#endif // STORMSINGER_WINDOWING_WAYLAND_H
