@@ -13,7 +13,7 @@
 ############################################################################
 
 cmake_minimum_required (VERSION 3.30 FATAL_ERROR)
-project("Stormsinger" LANGUAGES C VERSION 0.0.0.6)
+project("Stormsinger" LANGUAGES C VERSION 0.0.0.7)
 
 if(NOT DEFINED CMAKE_BUILD_TYPE)
 	message(WARNING "No build type provided. Defaulting to release.")
@@ -35,6 +35,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 add_executable(Stormsinger 
     "${CMAKE_SOURCE_DIR}/Source/Entry.c"
+    "${CMAKE_SOURCE_DIR}/Source/Vulkan.c" 
+    "${CMAKE_SOURCE_DIR}/Source/Vulkan/Device.c" 
     "${CMAKE_SOURCE_DIR}/Source/Windowing.c" 
     "${CMAKE_SOURCE_DIR}/Source/Windowing/Wayland.c"
     "${CMAKE_SOURCE_DIR}/Source/Windowing/Wayland/Registry.c"
@@ -44,8 +46,9 @@ add_executable(Stormsinger
 target_include_directories(Stormsinger PUBLIC "${CMAKE_SOURCE_DIR}/Include")
 
 # Give version information to source files.
+math(EXPR STORMSINGER_PACKED_VERSION "(${PROJECT_VERSION_MAJOR} << 22) | (${PROJECT_VERSION_MINOR} << 12) | ${PROJECT_VERSION_PATCH}")
 target_compile_definitions(Stormsinger PUBLIC 
-    STORMSINGER_VERSION="${PROJECT_VERSION}"
+    STORMSINGER_VERSION=${STORMSINGER_PACKED_VERSION}
 	STORMSINGER_VERSION_MAJOR=${PROJECT_VERSION_MAJOR}
 	STORMSINGER_VERSION_MINOR=${PROJECT_VERSION_MINOR}
 	STORMSINGER_VERSION_PATCH=${PROJECT_VERSION_PATCH}
@@ -75,6 +78,10 @@ else()
         -mtune=native -Ofast -flto)
     target_link_options(Stormsinger PUBLIC -Ofast -flto)
 endif()
+
+find_package(Vulkan REQUIRED)
+target_link_libraries(Stormsinger ${Vulkan_LIBRARIES})
+target_include_directories(Stormsinger PUBLIC ${Vulkan_INCLUDE_DIRS})
 
 if(STORMSINGER_WAYLAND)
     target_compile_definitions(Stormsinger PUBLIC STORMSINGER_WAYLAND)
