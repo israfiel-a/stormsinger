@@ -3,7 +3,7 @@
 ---
 
 ### Contributing
-Stormsinger is open source. I *want* improvements, because I am *certainly* not the best programmer out there. If you want a system to be improved, improve it! I only have so much time and so much motivation, so I'll welcome your changes. However, I do have standards. Those, along with my expectations for community interaction, are detailed here.
+Stormsinger is open source. I *want* improvements, because I am *certainly* not the best programmer out there. If you want a system to be improved, improve it! I only have so much time and so much motivation, so I'll welcome your changes. However, I do have standards.
 
 Table of contents:
 - [Style](#style)
@@ -13,9 +13,6 @@ Table of contents:
     - [Performance](#performance)
     - [Purpose](#purpose)
     - [Documentation](#documentation)
-- [Community](#community)
-    - [Hostility](#hostility)
-    - [Topicality](#topicality)
 
 ---
 
@@ -92,17 +89,6 @@ For global variables:
 ```
 
 Note that no update version is required for global variables. They're simply not consequential enough to require it--the only changes would be name changes, and documenting that would be rather ridiculous.
-
----
-
-### Community
-I expect the community this game fosters to be civil and mature. I am no manner of "fun police", but things like racism, homophobia, transphobia, or any other -phobia are not going to be tolerated, and will result in a warning, and if the behavior continues a permanent ban from participating in any official spaces.
-
-#### Hostility
-Please do try to remove unnecessary hostility from your messages. There is absolutely no need for the incredibly hostile environment that the modern internet seems to have become. If someone is being hostile to you, just report them to a moderator on whatever platform and move on with your life. You do not have to win arguments with people you've never met--you're just wasting time better spent programming.
-
-#### Topicality
-Try to stay on topic. The occasional tangent doesn't matter much, but whole ass conversations should be kept to private things like DM/PMs. This is a community for Stormsinger, not for random discussions. We are not a debate team.
 
 ---
 
