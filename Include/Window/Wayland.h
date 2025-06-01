@@ -12,4 +12,7 @@ bool stormsinger_waylandPollEvents(void);
 uint32_t stormsinger_waylandGetWidth(void);
 uint32_t stormsinger_waylandGetHeight(void);
 
+uint32_t stormsinger_waylandGetFramebufferWidth(void);
+uint32_t stormsinger_waylandGetFramebufferHeight(void);
+
 #endif // STORMSINGER_WINDOW_WAYLAND_H

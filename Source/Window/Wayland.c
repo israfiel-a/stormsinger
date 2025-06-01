@@ -3,6 +3,7 @@
 #include <wayland-client.h>
 
 #include <Window/Wayland/Compositor.h>
+#include <Window/Wayland/Output.h>
 #include <Window/Wayland/Registry.h>
 
 static struct wl_display *pDisplay = nullptr;
@@ -38,4 +39,16 @@ uint32_t stormsinger_waylandGetWidth(void)
 uint32_t stormsinger_waylandGetHeight(void)
 {
     return stormsinger_waylandGetSurfaceHeight();
+}
+
+uint32_t stormsinger_waylandGetFramebufferWidth(void)
+{
+    return stormsinger_waylandGetSurfaceWidth() *
+           stormsinger_waylandGetOutputScale();
+}
+
+uint32_t stormsinger_waylandGetFramebufferHeight(void)
+{
+    return stormsinger_waylandGetSurfaceHeight() *
+           stormsinger_waylandGetOutputScale();
 }
