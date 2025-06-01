@@ -15,3 +15,5 @@ bool stormsinger_vulkanCreateSurface(VkInstance instance)
 
     return true;
 }
+
+VkSurfaceKHR stormsinger_vulkanGetSurface(void) { return pSurface; }

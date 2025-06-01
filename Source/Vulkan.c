@@ -40,8 +40,8 @@ bool stormsinger_vulkanInitialize(void)
         return false;
     }
 
-    if (!stormsinger_vulkanCreateDevice(pInstance)) return false;
     if (!stormsinger_vulkanCreateSurface(pInstance)) return false;
+    if (!stormsinger_vulkanCreateDevice(pInstance)) return false;
 
     return true;
 }

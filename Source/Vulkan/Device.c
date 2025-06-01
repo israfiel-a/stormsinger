@@ -1,10 +1,12 @@
 #include <Vulkan/Device.h>
+#include <Vulkan/Surface.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 static VkPhysicalDevice pPhysicalDevice = nullptr;
 static VkDevice pLogicalDevice = nullptr;
 static VkQueue pGraphicsQueue = nullptr;
+static VkQueue pPresentQueue = nullptr;
 
 uint32_t scoreDevice(VkPhysicalDevice device)
 {
@@ -55,8 +57,6 @@ bool stormsinger_vulkanCreateDevice(VkInstance instance)
     pPhysicalDevice = currentChosen;
     free(physicalDevices);
 
-    uint32_t graphicsQueue = 0;
-
     uint32_t queueFamilyCount = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(pPhysicalDevice,
                                              &queueFamilyCount, nullptr);
@@ -66,39 +66,63 @@ bool stormsinger_vulkanCreateDevice(VkInstance instance)
     vkGetPhysicalDeviceQueueFamilyProperties(
         pPhysicalDevice, &queueFamilyCount, queueFamilies);
 
-    bool foundQueue = false;
+    uint32_t graphicsQueue = 0, presentQueue = 0;
+    bool foundGraphicsQueue = false, foundPresentQueue = false;
     for (size_t i = 0; i < queueFamilyCount; i++)
     {
+        if (foundGraphicsQueue && foundPresentQueue) break;
+
         VkQueueFamilyProperties family = queueFamilies[i];
         if (family.queueFlags & VK_QUEUE_GRAPHICS_BIT)
         {
             graphicsQueue = i;
-            foundQueue = true;
-            break;
+            foundGraphicsQueue = true;
+        }
+
+        VkBool32 presentSupport = false;
+        vkGetPhysicalDeviceSurfaceSupportKHR(
+            pPhysicalDevice, i, stormsinger_vulkanGetSurface(),
+            &presentSupport);
+        if (presentSupport)
+        {
+            presentQueue = i;
+            foundPresentQueue = true;
         }
     }
 
-    if (!foundQueue)
+    if (!foundGraphicsQueue)
     {
         fprintf(stderr, "Failed to find graphics queue.\n");
         return false;
     }
 
-    VkDeviceQueueCreateInfo queueCreateInfo = {0};
-    queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-    queueCreateInfo.queueFamilyIndex = graphicsQueue;
-    queueCreateInfo.queueCount = 1;
+    if (!foundPresentQueue)
+    {
+        fprintf(stderr, "Failed to find presentation queue.\n");
+        return false;
+    }
 
     float priority = 1.0f;
-    queueCreateInfo.pQueuePriorities = &priority;
+    VkDeviceQueueCreateInfo queueCreateInfos[2] = {{0}, {0}};
+    queueCreateInfos[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    queueCreateInfos[0].queueFamilyIndex = graphicsQueue;
+    queueCreateInfos[0].queueCount = 1;
+    queueCreateInfos[0].pQueuePriorities = &priority;
+
+    queueCreateInfos[1].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    queueCreateInfos[1].queueFamilyIndex = presentQueue;
+    queueCreateInfos[1].queueCount = 1;
+    queueCreateInfos[1].pQueuePriorities = &priority;
 
     // We don't need any features at the moment.
     VkPhysicalDeviceFeatures usedFeatures = {0};
 
     VkDeviceCreateInfo logicalDeviceCreateInfo = {0};
     logicalDeviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    logicalDeviceCreateInfo.pQueueCreateInfos = &queueCreateInfo;
-    logicalDeviceCreateInfo.queueCreateInfoCount = 1;
+    logicalDeviceCreateInfo.pQueueCreateInfos = queueCreateInfos;
+    if (presentQueue != graphicsQueue)
+        logicalDeviceCreateInfo.queueCreateInfoCount = 2;
+    else logicalDeviceCreateInfo.queueCreateInfoCount = 1;
     logicalDeviceCreateInfo.pEnabledFeatures = &usedFeatures;
 
     // Layers for logical devices no longer need to be set in newer
@@ -115,6 +139,7 @@ bool stormsinger_vulkanCreateDevice(VkInstance instance)
     }
 
     vkGetDeviceQueue(pLogicalDevice, graphicsQueue, 0, &pGraphicsQueue);
+    vkGetDeviceQueue(pLogicalDevice, presentQueue, 0, &pPresentQueue);
 
     return true;
 }

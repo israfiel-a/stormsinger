@@ -5,4 +5,6 @@
 
 bool stormsinger_vulkanCreateSurface(VkInstance instance);
 
+VkSurfaceKHR stormsinger_vulkanGetSurface(void);
+
 #endif // STORMSINGER_VULKAN_SURFACE_H
