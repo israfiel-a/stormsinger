@@ -29,3 +29,13 @@ bool stormsinger_waylandPollEvents(void)
 {
     return wl_display_dispatch(pDisplay) != -1;
 }
+
+uint32_t stormsinger_waylandGetWidth(void)
+{
+    return stormsinger_waylandGetSurfaceWidth();
+}
+
+uint32_t stormsinger_waylandGetHeight(void)
+{
+    return stormsinger_waylandGetSurfaceHeight();
+}

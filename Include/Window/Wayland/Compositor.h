@@ -10,4 +10,7 @@ void stormsinger_waylandDestroyWindow();
 
 struct wl_surface *stormsinger_waylandGetSurface(void);
 
+uint32_t stormsinger_waylandGetSurfaceWidth(void);
+uint32_t stormsinger_waylandGetSurfaceHeight(void);
+
 #endif // STORMSINGER_WAYLAND_COMPOSITOR_H

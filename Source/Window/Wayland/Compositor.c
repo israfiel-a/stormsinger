@@ -10,6 +10,9 @@ static struct wl_surface *pSurface = nullptr;
 static struct xdg_surface *pShellSurface = nullptr;
 static struct xdg_toplevel *pToplevel = nullptr;
 
+static uint32_t pWidth = 0;
+static uint32_t pHeight = 0;
+
 static void handleConfigure(void *data, struct xdg_surface *shellSurface,
                             uint32_t serial)
 {
@@ -35,6 +38,8 @@ static void handleTopConfigure(void *data, struct xdg_toplevel *toplevel,
     (void)toplevel;
     (void)states;
 
+    pWidth = width;
+    pHeight = height;
     printf("Window dimensions adjusted: %dx%d.\n", width, height);
 }
 
@@ -95,3 +100,6 @@ void stormsinger_waylandCreateWindow(struct wl_display *display)
 void stormsinger_waylandDestroyWindow() {}
 
 struct wl_surface *stormsinger_waylandGetSurface(void) { return pSurface; }
+
+uint32_t stormsinger_waylandGetSurfaceWidth(void) { return pWidth; }
+uint32_t stormsinger_waylandGetSurfaceHeight(void) { return pHeight; }

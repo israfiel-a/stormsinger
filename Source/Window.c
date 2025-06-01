@@ -6,7 +6,7 @@
 
 static bool pClose = false;
 
-bool stormsinger_createWindow(void)
+bool stormsinger_windowCreate(void)
 {
 #ifdef STORMSINGER_WAYLAND
     if (!stormsinger_waylandConnect()) return false;
@@ -17,7 +17,7 @@ bool stormsinger_createWindow(void)
 
 void stormsinger_windowClose(bool close) { pClose = close; }
 
-void stormsinger_runWindow(void)
+void stormsinger_windowRun(void)
 {
     while (!pClose)
     {
@@ -25,4 +25,18 @@ void stormsinger_runWindow(void)
         if (!stormsinger_waylandPollEvents()) break;
 #endif
     }
+}
+
+uint32_t stormsinger_windowGetWidth(void)
+{
+#ifdef STORMSINGER_WAYLAND
+    return stormsinger_waylandGetWidth();
+#endif
+}
+
+uint32_t stormsinger_windowGetHeight(void)
+{
+#ifdef STORMSINGER_WAYLAND
+    return stormsinger_waylandGetHeight();
+#endif
 }
