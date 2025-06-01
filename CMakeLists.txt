@@ -13,7 +13,7 @@
 ############################################################################
 
 cmake_minimum_required (VERSION 3.30 FATAL_ERROR)
-project("Stormsinger" LANGUAGES C VERSION 0.0.0.11)
+project("Stormsinger" LANGUAGES C VERSION 0.0.0.12)
 
 if(NOT DEFINED CMAKE_BUILD_TYPE)
 	message(WARNING "No build type provided. Defaulting to release.")
@@ -42,9 +42,10 @@ add_executable(Stormsinger
     "${CMAKE_SOURCE_DIR}/Source/Vulkan/Surface/Wayland.c" 
     "${CMAKE_SOURCE_DIR}/Source/Window.c" 
     "${CMAKE_SOURCE_DIR}/Source/Window/Wayland.c"
+    "${CMAKE_SOURCE_DIR}/Source/Window/Wayland/Compositor.c"
+    "${CMAKE_SOURCE_DIR}/Source/Window/Wayland/Output.c"
     "${CMAKE_SOURCE_DIR}/Source/Window/Wayland/Registry.c"
     "${CMAKE_SOURCE_DIR}/Source/Window/Wayland/Shell.c"
-    "${CMAKE_SOURCE_DIR}/Source/Window/Wayland/Compositor.c"
 )
 target_include_directories(Stormsinger PUBLIC "${CMAKE_SOURCE_DIR}/Include")
 

@@ -1,4 +1,6 @@
+#include <Window.h>
 #include <Window/Wayland/Compositor.h>
+#include <Window/Wayland/Output.h>
 #include <Window/Wayland/Shell.h>
 #include <stdio.h>
 #include <wayland-client.h>
@@ -22,6 +24,7 @@ static void handleTopClose(void *data, struct xdg_toplevel *toplevel)
 {
     (void)data;
     (void)toplevel;
+    stormsinger_windowClose(true);
 }
 
 static void handleTopConfigure(void *data, struct xdg_toplevel *toplevel,
@@ -30,9 +33,9 @@ static void handleTopConfigure(void *data, struct xdg_toplevel *toplevel,
 {
     (void)data;
     (void)toplevel;
-    (void)width;
-    (void)height;
     (void)states;
+
+    printf("Window dimensions adjusted: %dx%d.\n", width, height);
 }
 
 static void handleTopConfigureBounds(void *data,
@@ -83,6 +86,9 @@ void stormsinger_waylandCreateWindow(struct wl_display *display)
 
     wl_surface_commit(pSurface);
     wl_display_roundtrip(display);
+    wl_surface_commit(pSurface);
+
+    xdg_toplevel_set_fullscreen(pToplevel, stormsinger_waylandGetOutput());
     wl_surface_commit(pSurface);
 }
 

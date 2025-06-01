@@ -3,6 +3,7 @@
 #include <xdg-shell-protocol.h>
 
 #include <Window/Wayland/Compositor.h>
+#include <Window/Wayland/Output.h>
 #include <Window/Wayland/Shell.h>
 
 static struct wl_registry *pRegistry = nullptr;
@@ -18,6 +19,8 @@ static void handleGlobal(void *data, struct wl_registry *registry,
         stormsinger_waylandBindCompositor(registry, name);
     else if (strcmp(interface, xdg_wm_base_interface.name) == 0)
         stormsinger_waylandBindShell(registry, name);
+    else if (strcmp(interface, wl_output_interface.name) == 0)
+        stormsinger_waylandBindOutput(registry, name);
 }
 
 static void handleGlobalRemove(void *data, struct wl_registry *registry,

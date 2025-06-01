@@ -4,6 +4,8 @@
 #include <Window/Wayland.h>
 #endif
 
+static bool pClose = false;
+
 bool stormsinger_createWindow(void)
 {
 #ifdef STORMSINGER_WAYLAND
@@ -11,4 +13,16 @@ bool stormsinger_createWindow(void)
 #endif
 
     return true;
+}
+
+void stormsinger_windowClose(bool close) { pClose = close; }
+
+void stormsinger_runWindow(void)
+{
+    while (!pClose)
+    {
+#ifdef STORMSINGER_WAYLAND
+        if (!stormsinger_waylandPollEvents()) break;
+#endif
+    }
 }

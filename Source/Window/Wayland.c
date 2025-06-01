@@ -24,3 +24,8 @@ bool stormsinger_waylandConnect(void)
 }
 
 struct wl_display *stormsinger_waylandGetDisplay(void) { return pDisplay; }
+
+bool stormsinger_waylandPollEvents(void)
+{
+    return wl_display_dispatch(pDisplay) != -1;
+}
