@@ -8,4 +8,6 @@ void stormsinger_waylandBindOutput(struct wl_registry *registry,
 
 struct wl_output *stormsinger_waylandGetOutput(void);
 
+int32_t stormsinger_waylandGetOutputScale(void);
+
 #endif // STORMSINGER_WAYLAND_OUTPUT_H
