@@ -5,6 +5,20 @@
 
 bool stormsinger_vulkanCreateSurface(VkInstance instance);
 
+VkSurfaceCapabilitiesKHR
+stormsinger_vulkanGetSurfaceCapabilities(VkPhysicalDevice device);
+
+VkExtent2D stormsinger_vulkanGetSurfaceSwapExtent(void);
+
+VkSurfaceFormatKHR *
+stormsinger_vulkanGetSurfaceFormats(VkPhysicalDevice device);
+
+VkPresentModeKHR *
+stormsinger_vulkanGetSurfaceModes(VkPhysicalDevice device);
+
+VkSurfaceFormatKHR stormsinger_vulkanChooseSurfaceFormat(void);
+VkPresentModeKHR stormsinger_vulkanChooseSurfaceMode(void);
+
 VkSurfaceKHR stormsinger_vulkanGetSurface(void);
 
 #endif // STORMSINGER_VULKAN_SURFACE_H

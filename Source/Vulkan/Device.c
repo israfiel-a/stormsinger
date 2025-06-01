@@ -2,13 +2,15 @@
 #include <Vulkan/Surface.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 static VkPhysicalDevice pPhysicalDevice = nullptr;
 static VkDevice pLogicalDevice = nullptr;
 static VkQueue pGraphicsQueue = nullptr;
 static VkQueue pPresentQueue = nullptr;
 
-uint32_t scoreDevice(VkPhysicalDevice device)
+uint32_t scoreDevice(VkPhysicalDevice device, const char **extensions,
+                     size_t extensionCount)
 {
     VkPhysicalDeviceProperties properties;
     VkPhysicalDeviceFeatures features;
@@ -24,6 +26,42 @@ uint32_t scoreDevice(VkPhysicalDevice device)
         default:                                     score += 1; break;
     }
 
+    uint32_t availableExtensionCount = 0;
+    vkEnumerateDeviceExtensionProperties(
+        device, nullptr, &availableExtensionCount, nullptr);
+    VkExtensionProperties *availableExtensions =
+        malloc(sizeof(VkExtensionProperties) * availableExtensionCount);
+    vkEnumerateDeviceExtensionProperties(
+        device, nullptr, &availableExtensionCount, availableExtensions);
+
+    size_t foundCount = 0;
+    for (size_t i = 0; i < availableExtensionCount; i++)
+    {
+        VkExtensionProperties extension = availableExtensions[i];
+
+        for (size_t j = 0; j < extensionCount; j++)
+            if (strcmp(extension.extensionName, extensions[j]) == 0)
+            {
+                foundCount++;
+                printf("Found: %s device extension.\n",
+                       extension.extensionName);
+                break;
+            }
+    }
+    free(availableExtensions);
+    if (foundCount != extensionCount)
+    {
+        fprintf(stderr, "Failed to find all device extensions.\n");
+        return 0;
+    }
+
+    if (stormsinger_vulkanGetSurfaceFormats(device) == nullptr ||
+        stormsinger_vulkanGetSurfaceModes(device) == nullptr)
+    {
+        fprintf(stderr, "Failed to find surface format/present modes.\n");
+        return 0;
+    }
+
     // TODO: Extra grading to be done here.
 
     return score;
@@ -37,11 +75,15 @@ bool stormsinger_vulkanCreateDevice(VkInstance instance)
         malloc(sizeof(VkPhysicalDevice) * physicalCount);
     vkEnumeratePhysicalDevices(instance, &physicalCount, physicalDevices);
 
+    constexpr size_t extensionCount = 1;
+    const char *extensions[extensionCount] = {"VK_KHR_swapchain"};
+
     VkPhysicalDevice currentChosen = nullptr;
     uint32_t bestScore = 0;
     for (size_t i = 0; i < physicalCount; i++)
     {
-        uint32_t score = scoreDevice(physicalDevices[i]);
+        uint32_t score =
+            scoreDevice(physicalDevices[i], extensions, extensionCount);
         if (score > bestScore)
         {
             currentChosen = physicalDevices[i];
@@ -117,6 +159,8 @@ bool stormsinger_vulkanCreateDevice(VkInstance instance)
     // We don't need any features at the moment.
     VkPhysicalDeviceFeatures usedFeatures = {0};
 
+    // Layers for logical devices no longer need to be set in newer
+    // implementations.
     VkDeviceCreateInfo logicalDeviceCreateInfo = {0};
     logicalDeviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     logicalDeviceCreateInfo.pQueueCreateInfos = queueCreateInfos;
@@ -125,8 +169,8 @@ bool stormsinger_vulkanCreateDevice(VkInstance instance)
     else logicalDeviceCreateInfo.queueCreateInfoCount = 1;
     logicalDeviceCreateInfo.pEnabledFeatures = &usedFeatures;
 
-    // Layers for logical devices no longer need to be set in newer
-    // implementations.
+    logicalDeviceCreateInfo.enabledExtensionCount = extensionCount;
+    logicalDeviceCreateInfo.ppEnabledExtensionNames = extensions;
 
     VkResult code =
         vkCreateDevice(pPhysicalDevice, &logicalDeviceCreateInfo, nullptr,
