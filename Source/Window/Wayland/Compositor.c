@@ -88,12 +88,10 @@ void stormsinger_waylandCreateWindow(struct wl_display *display)
 
     xdg_toplevel_set_title(pToplevel, "Stormsinger");
     xdg_toplevel_set_app_id(pToplevel, "Stormsinger");
+    xdg_toplevel_set_fullscreen(pToplevel, stormsinger_waylandGetOutput());
 
     wl_surface_commit(pSurface);
     wl_display_roundtrip(display);
-    wl_surface_commit(pSurface);
-
-    xdg_toplevel_set_fullscreen(pToplevel, stormsinger_waylandGetOutput());
     wl_surface_commit(pSurface);
 }
 

@@ -27,10 +27,15 @@ bool stormsinger_vulkanCreateSurface(VkInstance instance)
 }
 
 VkSurfaceCapabilitiesKHR
-stormsinger_vulkanGetSurfaceCapabilities(VkPhysicalDevice device)
+stormsinger_vulkanFindSurfaceCapabilities(VkPhysicalDevice device)
 {
     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, pSurface,
                                               &pCapabilities);
+    return pCapabilities;
+}
+
+VkSurfaceCapabilitiesKHR stormsinger_vulkanGetSurfaceCapabilities()
+{
     return pCapabilities;
 }
 

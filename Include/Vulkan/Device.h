@@ -5,4 +5,7 @@
 
 bool stormsinger_vulkanCreateDevice(VkInstance instance);
 
+uint32_t stormsinger_vulkanGetGraphicsIndex(void);
+uint32_t stormsinger_vulkanGetPresentIndex(void);
+
 #endif // STORMSINGER_VULKAN_DEVICE_H

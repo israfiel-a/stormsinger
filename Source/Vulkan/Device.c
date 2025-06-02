@@ -1,5 +1,6 @@
 #include <Vulkan/Device.h>
 #include <Vulkan/Surface.h>
+#include <Vulkan/Swapchain.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,6 +9,8 @@ static VkPhysicalDevice pPhysicalDevice = nullptr;
 static VkDevice pLogicalDevice = nullptr;
 static VkQueue pGraphicsQueue = nullptr;
 static VkQueue pPresentQueue = nullptr;
+static uint32_t pGraphicsIndex = 0;
+static uint32_t pPresentIndex = 0;
 
 uint32_t scoreDevice(VkPhysicalDevice device, const char **extensions,
                      size_t extensionCount)
@@ -108,7 +111,6 @@ bool stormsinger_vulkanCreateDevice(VkInstance instance)
     vkGetPhysicalDeviceQueueFamilyProperties(
         pPhysicalDevice, &queueFamilyCount, queueFamilies);
 
-    uint32_t graphicsQueue = 0, presentQueue = 0;
     bool foundGraphicsQueue = false, foundPresentQueue = false;
     for (size_t i = 0; i < queueFamilyCount; i++)
     {
@@ -117,7 +119,7 @@ bool stormsinger_vulkanCreateDevice(VkInstance instance)
         VkQueueFamilyProperties family = queueFamilies[i];
         if (family.queueFlags & VK_QUEUE_GRAPHICS_BIT)
         {
-            graphicsQueue = i;
+            pGraphicsIndex = i;
             foundGraphicsQueue = true;
         }
 
@@ -127,7 +129,7 @@ bool stormsinger_vulkanCreateDevice(VkInstance instance)
             &presentSupport);
         if (presentSupport)
         {
-            presentQueue = i;
+            pPresentIndex = i;
             foundPresentQueue = true;
         }
     }
@@ -147,12 +149,12 @@ bool stormsinger_vulkanCreateDevice(VkInstance instance)
     float priority = 1.0f;
     VkDeviceQueueCreateInfo queueCreateInfos[2] = {{0}, {0}};
     queueCreateInfos[0].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-    queueCreateInfos[0].queueFamilyIndex = graphicsQueue;
+    queueCreateInfos[0].queueFamilyIndex = pGraphicsIndex;
     queueCreateInfos[0].queueCount = 1;
     queueCreateInfos[0].pQueuePriorities = &priority;
 
     queueCreateInfos[1].sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-    queueCreateInfos[1].queueFamilyIndex = presentQueue;
+    queueCreateInfos[1].queueFamilyIndex = pPresentIndex;
     queueCreateInfos[1].queueCount = 1;
     queueCreateInfos[1].pQueuePriorities = &priority;
 
@@ -164,7 +166,7 @@ bool stormsinger_vulkanCreateDevice(VkInstance instance)
     VkDeviceCreateInfo logicalDeviceCreateInfo = {0};
     logicalDeviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     logicalDeviceCreateInfo.pQueueCreateInfos = queueCreateInfos;
-    if (presentQueue != graphicsQueue)
+    if (pPresentIndex != pGraphicsIndex)
         logicalDeviceCreateInfo.queueCreateInfoCount = 2;
     else logicalDeviceCreateInfo.queueCreateInfoCount = 1;
     logicalDeviceCreateInfo.pEnabledFeatures = &usedFeatures;
@@ -182,8 +184,18 @@ bool stormsinger_vulkanCreateDevice(VkInstance instance)
         return false;
     }
 
-    vkGetDeviceQueue(pLogicalDevice, graphicsQueue, 0, &pGraphicsQueue);
-    vkGetDeviceQueue(pLogicalDevice, presentQueue, 0, &pPresentQueue);
+    vkGetDeviceQueue(pLogicalDevice, pGraphicsIndex, 0, &pGraphicsQueue);
+    vkGetDeviceQueue(pLogicalDevice, pPresentIndex, 0, &pPresentQueue);
+
+    stormsinger_vulkanFindSurfaceCapabilities(pPhysicalDevice);
+    if (!stormsinger_vulkanCreateSwapchain(pLogicalDevice)) return false;
 
     return true;
 }
+
+uint32_t stormsinger_vulkanGetGraphicsIndex(void)
+{
+    return pGraphicsIndex;
+}
+
+uint32_t stormsinger_vulkanGetPresentIndex(void) { return pPresentIndex; }

@@ -2,6 +2,7 @@
 
 #ifdef STORMSINGER_WAYLAND
 #include <Window/Wayland.h>
+#include <Window/Wayland/Compositor.h>
 #endif
 
 static bool pClose = false;

@@ -1,6 +1,8 @@
 #ifndef STORMSINGER_VULKAN_SWAPCHAIN_H
 #define STORMSINGER_VULKAN_SWAPCHAIN_H
 
-void stormsinger_vulkanCreateSwapchain(void);
+#include <vulkan/vulkan.h>
+
+bool stormsinger_vulkanCreateSwapchain(VkDevice logicalDevice);
 
 #endif // STORMSINGER_VULKAN_SWAPCHAIN_H
