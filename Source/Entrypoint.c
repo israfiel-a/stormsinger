@@ -6,10 +6,10 @@ int main(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    stormsinger_createWindow();
+    stormsinger_windowCreate();
     stormsinger_vulkanInitialize();
 
-    stormsinger_runWindow();
+    stormsinger_windowRun();
 
     return 0;
 }
