@@ -64,7 +64,7 @@ Since pre-1.0.0.
 
 include("${CMAKE_CURRENT_LIST_DIR}/Helpers.cmake")
 
-set(Wayland_known_components Client Cursor)
+set(Wayland_known_components Client)
 foreach(_comp ${Wayland_known_components})
     string(TOLOWER "${_comp}" _lc_comp)
     set(Wayland_${_comp}_component_deps)

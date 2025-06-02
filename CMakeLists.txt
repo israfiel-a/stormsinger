@@ -13,7 +13,7 @@
 ############################################################################
 
 cmake_minimum_required (VERSION 3.30 FATAL_ERROR)
-project("Stormsinger" LANGUAGES C VERSION 0.0.0.19)
+project("Stormsinger" LANGUAGES C VERSION 0.0.0.20)
 
 if(NOT DEFINED CMAKE_BUILD_TYPE)
 	message(WARNING "No build type provided. Defaulting to release.")
@@ -37,6 +37,7 @@ add_executable(Stormsinger
     "${CMAKE_SOURCE_DIR}/Source/Entrypoint.c"
     "${CMAKE_SOURCE_DIR}/Source/Vulkan.c" 
     "${CMAKE_SOURCE_DIR}/Source/Vulkan/Device.c" 
+    "${CMAKE_SOURCE_DIR}/Source/Vulkan/Pipeline.c" 
     "${CMAKE_SOURCE_DIR}/Source/Vulkan/Swapchain.c" 
     "${CMAKE_SOURCE_DIR}/Source/Vulkan/Surface.c" 
     "${CMAKE_SOURCE_DIR}/Source/Vulkan/Surface/Wayland.c" 
@@ -83,7 +84,7 @@ else()
     target_link_options(Stormsinger PUBLIC -Ofast -flto)
 endif()
 
-find_package(Vulkan REQUIRED)
+find_package(Vulkan REQUIRED COMPONENTS glslc)
 target_link_libraries(Stormsinger ${Vulkan_LIBRARIES})
 target_include_directories(Stormsinger PUBLIC ${Vulkan_INCLUDE_DIRS})
 

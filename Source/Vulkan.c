@@ -1,5 +1,6 @@
 #include <Vulkan.h>
 #include <Vulkan/Device.h>
+#include <Vulkan/Pipeline.h>
 #include <Vulkan/Surface.h>
 #include <stdio.h>
 #include <vulkan/vulkan.h>
@@ -42,6 +43,7 @@ bool stormsinger_vulkanInitialize(void)
 
     if (!stormsinger_vulkanCreateSurface(pInstance)) return false;
     if (!stormsinger_vulkanCreateDevice(pInstance)) return false;
+    if (!stormsinger_vulkanCreatePipeline(pInstance)) return false;
     return true;
 }
 
