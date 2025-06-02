@@ -40,3 +40,16 @@ uint32_t stormsinger_windowGetHeight(void)
     return stormsinger_waylandGetHeight();
 #endif
 }
+
+uint32_t stormsinger_windowGetFramebufferWidth(void)
+{
+#ifdef STORMSINGER_WAYLAND
+    return stormsinger_waylandGetFramebufferWidth();
+#endif
+}
+uint32_t stormsinger_windowGetFramebufferHeight(void)
+{
+#ifdef STORMSINGER_WAYLAND
+    return stormsinger_waylandGetFramebufferHeight();
+#endif
+}

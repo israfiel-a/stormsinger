@@ -12,4 +12,7 @@ void stormsinger_windowRun(void);
 uint32_t stormsinger_windowGetWidth(void);
 uint32_t stormsinger_windowGetHeight(void);
 
+uint32_t stormsinger_windowGetFramebufferWidth(void);
+uint32_t stormsinger_windowGetFramebufferHeight(void);
+
 #endif // STORMSINGER_WINDOWING_H

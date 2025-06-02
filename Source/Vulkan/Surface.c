@@ -1,4 +1,5 @@
 #include <Vulkan/Surface.h>
+#include <Window.h>
 #include <stdlib.h>
 
 #ifdef STORMSINGER_WAYLAND
@@ -33,28 +34,31 @@ stormsinger_vulkanGetSurfaceCapabilities(VkPhysicalDevice device)
     return pCapabilities;
 }
 
-VkExtent2D stormsinger_vulkanGetSurfaceSwapExtent(void)
+// TODO: Get this the fuck outta here.
+// https://stackoverflow.com/questions/427477/fastest-way-to-clamp-a-real-fixed-floating-point-value#16659263
+uint32_t _clamp(uint32_t d, uint32_t min, uint32_t max)
+{
+    const uint32_t t = d < min ? min : d;
+    return t > max ? max : t;
+}
+
+VkExtent2D stormsinger_vulkanGetSurfaceExtent(void)
 {
     if (pCapabilities.currentExtent.width != UINT32_MAX)
         return pCapabilities.currentExtent;
 
-    // int width, height;
-    // glfwGetFramebufferSize(window, &width, &height);
+    VkExtent2D surfaceExtent = {
+        .width = stormsinger_windowGetFramebufferWidth(),
+        .height = stormsinger_windowGetFramebufferHeight()};
 
-    // VkExtent2D actualExtent = {static_cast<uint32_t>(width),
-    //                            static_cast<uint32_t>(height)};
+    surfaceExtent.width =
+        _clamp(surfaceExtent.width, pCapabilities.minImageExtent.width,
+               pCapabilities.maxImageExtent.width);
+    surfaceExtent.height =
+        _clamp(surfaceExtent.height, pCapabilities.minImageExtent.height,
+               pCapabilities.maxImageExtent.height);
 
-    // actualExtent.width =
-    //     std::clamp(actualExtent.width,
-    //     capabilities.minImageExtent.width,
-    //                capabilities.maxImageExtent.width);
-    // actualExtent.height =
-    //     std::clamp(actualExtent.height,
-    //     capabilities.minImageExtent.height,
-    //                capabilities.maxImageExtent.height);
-
-    // return actualExtent;
-    return pCapabilities.currentExtent;
+    return surfaceExtent;
 }
 
 VkSurfaceFormatKHR *
