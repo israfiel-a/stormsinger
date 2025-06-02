@@ -2,9 +2,11 @@
 #include <Vulkan/Surface.h>
 #include <Vulkan/Swapchain.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <vulkan/vulkan.h>
 
 static VkSwapchainKHR pSwapchain = nullptr;
+static VkImageView *pSwapchainImages = nullptr;
 
 bool stormsinger_vulkanCreateSwapchain(VkDevice logicalDevice)
 {
@@ -49,6 +51,39 @@ bool stormsinger_vulkanCreateSwapchain(VkDevice logicalDevice)
     {
         fprintf(stderr, "Failed to create swapchain.\n");
         return false;
+    }
+
+    vkGetSwapchainImagesKHR(logicalDevice, pSwapchain, &imageCount,
+                            nullptr);
+    VkImage *images = malloc(sizeof(VkImage) * imageCount);
+    pSwapchainImages = malloc(sizeof(VkImageView) * imageCount);
+    vkGetSwapchainImagesKHR(logicalDevice, pSwapchain, &imageCount,
+                            images);
+
+    VkImageViewCreateInfo imageCreateInfo = {0};
+    imageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+    imageCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+    imageCreateInfo.format = format.format;
+    imageCreateInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+    imageCreateInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+    imageCreateInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+    imageCreateInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+    imageCreateInfo.subresourceRange.aspectMask =
+        VK_IMAGE_ASPECT_COLOR_BIT;
+    imageCreateInfo.subresourceRange.baseMipLevel = 0;
+    imageCreateInfo.subresourceRange.levelCount = 1;
+    imageCreateInfo.subresourceRange.baseArrayLayer = 0;
+    imageCreateInfo.subresourceRange.layerCount = 1;
+
+    for (size_t i = 0; i < imageCount; i++)
+    {
+        imageCreateInfo.image = images[i];
+        if (vkCreateImageView(logicalDevice, &imageCreateInfo, nullptr,
+                              &pSwapchainImages[i]) != VK_SUCCESS)
+        {
+            fprintf(stderr, "Failed to create image view %zu.", i);
+            return false;
+        }
     }
 
     return true;
