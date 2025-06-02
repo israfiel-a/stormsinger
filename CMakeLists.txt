@@ -13,7 +13,7 @@
 ############################################################################
 
 cmake_minimum_required (VERSION 3.30 FATAL_ERROR)
-project("Stormsinger" LANGUAGES C VERSION 0.0.0.20)
+project("Stormsinger" LANGUAGES C VERSION 0.0.0.21)
 
 if(NOT DEFINED CMAKE_BUILD_TYPE)
 	message(WARNING "No build type provided. Defaulting to release.")
@@ -103,3 +103,16 @@ if(STORMSINGER_WAYLAND)
     # make sure we can wrangle said header.
     target_include_directories(Stormsinger PUBLIC "${CMAKE_BINARY_DIR}")
 endif()
+
+list(APPEND SHADERS "${CMAKE_SOURCE_DIR}/Assets/Shaders/default.vert"
+    "${CMAKE_SOURCE_DIR}/Assets/Shaders/default.frag")
+foreach(SHADER ${SHADERS})
+    get_filename_component(FILENAME ${SHADER} NAME)
+    add_custom_command(OUTPUT "${CMAKE_BINARY_DIR}/Stormsinger/${FILENAME}.spv"
+        COMMAND ${Vulkan_GLSLC_EXECUTABLE} ${SHADER} -o "${CMAKE_BINARY_DIR}/Stormsinger/${FILENAME}.spv"
+        DEPENDS ${SHADER}
+        COMMENT "Compiling shader '${FILENAME}.'")
+    list(APPEND SPV_SHADERS "${CMAKE_BINARY_DIR}/Stormsinger/${FILENAME}.spv")
+endforeach()
+add_custom_target(Shaders ALL DEPENDS ${SPV_SHADERS})
+add_dependencies(Stormsinger Shaders)
